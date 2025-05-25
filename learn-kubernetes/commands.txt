@@ -1,0 +1,31 @@
+List of commands to create k8s components with kubect:
+NOTES: "k" is an alias for kubectl
+
+
+minikube start --driver=docker
+minikube ip
+=> to get Cluster IP
+minikube service <service-name> --url
+minikube service <service-name>
+=> to tunnel or open connection to the exposed service, or to be
+able to open throug browser, "--url" to only get the url
+minikube delete
+
+
+k create deployment my-dply --image=bstashchuk/k8s-web-hello
+k get all -o wide
+k scale deployment my-dply --replicas=3
+k set image deployments my-dply k8s-web-hello=bstashchuk/k8s-web-hello:2.0.0
+=> "k8s-web-hello" is the deployment's container name, check "-o wide" to get it
+k rollout status deploy my-dply
+k expose deployment my-dply --port=3000 --target-port=3000
+k expose deployment my-dply --type=NodePort --port=3000
+k expose deployment my-dply --type=LoadBalancer --port=3000
+k get svc
+minikube service my-dply
+
+
+
+k logs -f <pod-or-deployment-name>
+k delete all --all
+

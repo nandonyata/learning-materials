@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: nanajanashia/k8s-demo-app:v1.0
+        ports:
+        - containerPort: 3000
+        env:
+        - name: USER_NAME #The env that needed by the image
+          valueFrom:
+            secretKeyRef:
+              name: my-secret #The secret name
+              key: mongo-user #The secret data
+        - name: USER_PWD
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: mongo-password
+        - name: DB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: my-configmap
+              key: mongo-url
+--- #We can have multiple yaml config within 1 file by using this separator "---"
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service #This values is gona be used by the configmap
+spec:
+  type: NodePort #External service type
+  selector:
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 3000 #can be any (8080 ...), but the common standard is using the target value as its value
+      targetPort: 3000
+      nodePort: 30100 #Required for external service

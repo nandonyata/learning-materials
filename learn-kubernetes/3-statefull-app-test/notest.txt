@@ -1,0 +1,13 @@
+sc: https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/
+
+COMMAND:
+1. kubectl apply -f mysql-pv.yaml
+2. kubectl apply -f mysql.yaml
+3. kubectl delete all --all
+4. kubectl get pv
+5. kubectl delete pv pv_name
+6. kubectl get pvc
+7. kubectl delete pvc pvc_name
+
+Accessing mysql instance:
+1. kubectl run -it --rm --image=mysql:latest --restart=Never mysql-client -- mysql -h mysql -ppassword

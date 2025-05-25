@@ -1,0 +1,60 @@
+sc: https://www.youtube.com/watch?v=d6WC5n9G_sM
+
+If we are going to do k8s on production, better use AWS kubernetes engine.
+Because its easier to use and maintain.
+Unless we are expert in it, even chatgpt said "If you're not afraid of breaking things 😅" lol.
+
+Self-managed:
+- Self-managed Kubernetes on EC2 – install and manage K8s yourself [NOT RECCOMMENDED, BUT GOOD TO TRY AND LEARN ONLY]
+
+Engines:
+- EKS
+- ECS (Elastic Container Service) - AWS's own container orchestration (not Kubernetes-based).
+
+Amazon EKS and Amazon ECS are both container orchestration services on AWS, but they differ significantly in architecture, 
+flexibility, complexity, and ecosystem.
+Here’s a clear breakdown:
+
+| Feature                          | **Amazon ECS (Elastic Container Service)** | **Amazon EKS (Elastic Kubernetes Service)**  |
+| -------------------------------- | ------------------------------------------ | -------------------------------------------- |
+| **Orchestration Engine**         | AWS-native                                 | Kubernetes (open-source standard)            |
+| **Learning Curve**               | Easier to get started                      | Steeper (Kubernetes complexity)              |
+| **Flexibility & Portability**    | Less portable (AWS-optimized)              | Very portable (works on any K8s environment) |
+| **Community & Ecosystem**        | Smaller, AWS-only                          | Large, open-source community                 |
+| **Vendor Lock-in**               | High (AWS proprietary APIs)                | Low (uses Kubernetes APIs)                   |
+| **Control Plane Management**     | Fully managed                              | Managed, but more involved                   |
+| **Custom Resources/Operators**   | Limited                                    | Fully supported                              |
+| **Deployment Options**           | AWS only                                   | AWS, on-prem, hybrid (via EKS Anywhere)      |
+| **Autoscaling & Load Balancing** | Native support                             | Via Kubernetes tools or AWS integration      |
+| **Fargate Support**              | Yes                                        | Yes                                          |
+| **Use Case**                     | Simpler AWS-only containerized workloads   | Complex, cross-cloud                         |
+
+
+Use ECS if you:
+- Want the simplest way to run containers on AWS.
+- Don't need to manage Kubernetes complexity.
+- Are fine being tightly coupled to AWS.
+- Want tight integration with AWS features like IAM, CloudWatch, etc.
+
+Use EKS if you:
+- Need Kubernetes features (CRDs, Helm, service mesh, etc.).
+- Want to standardize on Kubernetes across multiple clouds or environments.
+- Already have Kubernetes expertise or existing workloads.
+- Need vendor-neutral infrastructure.
+
+TL;DR:
+- ECS is simpler, AWS-native, less flexible.
+- EKS is Kubernetes-based, portable, more powerful but complex.
+
+
+
+| Approach                    | Pros                                                                | Cons                                                    |
+| --------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------- |
+| **Manual (bare metal)**     | Full control, great for learning, no vendor lock-in                 | Complex, error-prone, harder to scale, more maintenance |
+| **Managed (EKS, GKE, AKS)** | Easier to set up, autoscaling, built-in HA, upgrades, logging, etc. | Slightly higher cost, less low-level control            |
+
+
+TL;DR:
+Manual setup is great for learning, but for production most companies use managed services (like EKS) to reduce complexity.
+
+So if you're finding it hard — that’s totally normal. Most people do. You're doing great just getting this far.

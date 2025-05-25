@@ -1,0 +1,47 @@
+version: '2'  # Keep this at the top.
+
+services:
+  pg-1:
+    image: bitnami/postgresql-repmgr:14
+    ports:
+      - 5002:5432
+    volumes:
+      - pg_1_data:/bitnami/postgresql
+    environment:
+      - POSTGRESQL_POSTGRES_PASSWORD=adminpassword
+      - POSTGRESQL_USERNAME=customuser
+      - POSTGRESQL_PASSWORD=custompassword
+      - POSTGRESQL_DATABASE=customdatabase
+      - REPMGR_PASSWORD=repmgrpassword
+      - REPMGR_PRIMARY_HOST=pg-0  # This should be the public IP of pg-0 (e.g., 10.0.0.1)
+      - REPMGR_PARTNER_NODES=pg-0,pg-1
+      - REPMGR_NODE_NAME=pg-1
+      - REPMGR_NODE_NETWORK_NAME=pg-1
+volumes:
+  pg_1_data:
+    driver: local
+
+
+# version: '2'  # Keep this at the top.
+
+# services:
+#   pg-1:
+#     image: bitnami/postgresql-repmgr:14
+#     ports:
+#       - 5002:5432
+#     volumes:
+#       - pg_1_data:/bitnami/postgresql
+#     environment:
+#       - POSTGRESQL_POSTGRES_PASSWORD=adminpassword
+#       - POSTGRESQL_USERNAME=customuser
+#       - POSTGRESQL_PASSWORD=custompassword
+#       - POSTGRESQL_DATABASE=customdatabase
+#       - REPMGR_PASSWORD=repmgrpassword
+#       - REPMGR_PRIMARY_HOST=10.0.0.1  # Use the private IP of pg-0 (running on EC2 Instance 1)
+#       - REPMGR_PARTNER_NODES=10.0.0.1,10.0.0.2  # Use private IPs for both nodes
+#       - REPMGR_NODE_NAME=pg-1
+#       - REPMGR_NODE_NETWORK_NAME=pg-1
+
+# volumes:
+#   pg_1_data:
+#     driver: local

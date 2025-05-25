@@ -1,0 +1,98 @@
+pgpool:
+  image: bitnami/pgpool:4
+  ports:
+    - 5435:5432
+  environment:
+    - PGPOOL_BACKEND_NODES=0:pg-0:5432,1:pg-1:5432
+    - PGPOOL_SR_CHECK_USER=customuser
+    - PGPOOL_SR_CHECK_PASSWORD=custompassword
+    - PGPOOL_ENABLE_LDAP=no
+    - PGPOOL_POSTGRES_USERNAME=postgres
+    - PGPOOL_POSTGRES_PASSWORD=adminpassword
+    - PGPOOL_ADMIN_USERNAME=admin
+    - PGPOOL_ADMIN_PASSWORD=adminpassword
+  healthcheck:
+    test: ["CMD", "/opt/bitnami/scripts/pgpool/healthcheck.sh"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+
+
+
+# Change the PGPOOL_BACKEND_NODES to use the IPs of both pg-0 and pg-1, like so:
+# - PGPOOL_BACKEND_NODES=0:10.0.0.1:5432,1:10.0.0.2:5432
+
+
+
+# OR
+
+# version: '2'  # Keep this at the top.
+
+# services:
+#   pgpool:
+#     image: bitnami/pgpool:4
+#     ports:
+#       - 5435:5432
+#     environment:
+#       - PGPOOL_BACKEND_NODES=0:10.0.0.1:5432,1:10.0.0.2:5432  # Use the private IPs of pg-0 and pg-1
+#       - PGPOOL_SR_CHECK_USER=customuser
+#       - PGPOOL_SR_CHECK_PASSWORD=custompassword
+#       - PGPOOL_ENABLE_LDAP=no
+#       - PGPOOL_POSTGRES_USERNAME=postgres
+#       - PGPOOL_POSTGRES_PASSWORD=adminpassword
+#       - PGPOOL_ADMIN_USERNAME=admin
+#       - PGPOOL_ADMIN_PASSWORD=adminpassword
+#     healthcheck:
+#       test: ["CMD", "/opt/bitnami/scripts/pgpool/healthcheck.sh"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+
+# volumes:
+#   pgpool_data:
+#     driver: local
+
+
+
+
+
+
+
+
+# # # NOTESS:
+
+# If PostgreSQL-1 (pg-1) and PostgreSQL-2 (pg-0) are running on different EC2 instances, there are several adjustments you'll need to make to ensure proper communication between the instances. These adjustments mostly concern networking, ensuring the EC2 instances can communicate over the network, and adjusting the Docker Compose configuration for external connections.
+
+# Key Changes:
+# Networking Configuration:
+
+# Docker Compose uses a bridge network by default, but containers across different hosts cannot connect via the default bridge network. You need to ensure both EC2 instances are able to communicate over a network, and for Docker, you’ll need to set up a custom network or use a solution like Docker Swarm or Kubernetes for cross-host networking.
+# Use Docker’s overlay network if you're setting up Docker Swarm, or configure host networking for each container.
+# Adjust REPMGR_PRIMARY_HOST and REPMGR_PARTNER_NODES:
+
+# Since the PostgreSQL instances are now on different EC2 hosts, you need to specify their public IPs (or private IPs if they are on the same VPC and can communicate privately).
+# PGPool and Communication:
+
+# PGPool must be able to reach both pg-0 and pg-1 over the network, so you’ll have to ensure PGPOOL_BACKEND_NODES points to the correct IP addresses of the PostgreSQL instances.
+# EC2 Security Groups:
+
+# You need to update the security groups for both EC2 instances to allow inbound traffic on the necessary ports (e.g., 5432 for PostgreSQL, 5435 for PGPool). Ensure both EC2 instances can communicate on these ports.
+# Environment Variable Adjustments:
+
+# Update the REPMGR_PRIMARY_HOST to point to the public IP or private IP of the primary PostgreSQL instance (pg-0).
+# Update the REPMGR_PARTNER_NODES to include the proper names and IPs for both instances.
+# Example Modifications for EC2 Setup:
+# Let’s assume:
+
+# EC2 instance 1 (where pg-0 runs) has IP 10.0.0.1.
+# EC2 instance 2 (where pg-1 runs) has IP 10.0.0.2.
+# Both EC2 instances are within the same VPC.
+
+
+#  -- -- --
+
+
+# Additional Considerations:
+# Firewalls & Ports: Ensure that security groups for both EC2 instances allow inbound traffic on the PostgreSQL port (5432), as well as on the PGPool port (5435).
+# Private IPs: If your EC2 instances are in the same VPC, you can use private IPs for better security and performance. Update the REPMGR_PRIMARY_HOST and PGPOOL_BACKEND_NODES to use private IPs instead of public ones.
+# Once you’ve made these changes, you should be able to run the stack across two EC2 instances and have PostgreSQL replication and failover handled correctly. You can scale this setup further by adding more replicas or handling failover conditions based on your needs.

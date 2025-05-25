@@ -1,0 +1,32 @@
+We dont execute anything in this folder, just an example
+
+sc: https://www.youtube.com/watch?v=s_o8dwzRlu4
+
+Each config file has 3 parts:
+1. Metadata
+2. Specification
+3. Status => automatically generated and added by kubernetes
+
+
+What is MiniKube
+=> One node cluster, where Master and Worker Node processes both runs in once machine/node.
+And this node will have a dokcer container runtime pre-installed.
+=> Minikube is a tool that allows you to run Kubernetes locally. 
+It sets up a single-node Kubernetes cluster on your local machine, which is perfect for learning, development, and testing purposes.
+
+
+What is KubeCtl
+=> A command line tools for kubernetes cluster.
+=>
+So one of the master processes called API Server, its actually the main entrypoint on the kubernetes cluster.
+So if you wanted to do anything in kubernetes, configure, create any component, we first talk to the API Server.
+And the way to talk to the API Server is through different clients:
+- UI like dashboard
+- API like kubernetes API
+- CLI like KubeCtl => most powerfull of all the 3 clients
+
+
+MiniKube & kubectl COMMANDs:
+1. minikube start --driver=docker
+2. minikube status
+3. kubectl get node => get status of nodes

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  labels:
+    app: mongo
+spec:
+  replicas: 1 #we set to 1 because we should use StatefulSet instead for db replica
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME #The env that needed by the image
+          valueFrom:
+            secretKeyRef:
+              name: my-secret #The secret name
+              key: mongo-user #The secret data
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: mongo-password
+--- #We can have multiple yaml config within 1 file by using this separator "---"
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service #This values is gona be used by the configmap
+spec:
+  selector:
+    app: mongo
+  ports:
+    - protocol: TCP
+      port: 27017 #can be any (8080 ...), but common practice is using the target value as its value
+      targetPort: 27017

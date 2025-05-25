@@ -1,0 +1,57 @@
+# uses to configure and simplified the docker run command in structured way
+
+# docker run -d \
+#     -p 27017:27017 \
+#     --network mongo_network \
+#     --name mongo_db \
+# 	-e MONGO_INITDB_ROOT_USERNAME=admin \
+# 	-e MONGO_INITDB_ROOT_PASSWORD=psw \
+# 	mongo
+
+# docker run -d \
+#     --network mongo_network \
+#     --name mongo-express \
+#     -p 8081:8081 \
+#     -e ME_CONFIG_MONGODB_SERVER="mongo_db" \
+#     -e ME_CONFIG_MONGODB_ADMINUSERNAME="admin" \
+#     -e ME_CONFIG_MONGODB_ADMINPASSWORD="psw" \
+#     mongo-express
+
+# NOTESS:
+# Docker compose takes care of creating a common network !!! 
+# so we dont have to create and specify the network
+
+
+# RUN COMMAND:
+# docker-compose -f mongo-docker-compose.yml up -d
+
+version: '3'
+services:
+  mongo_db: # container name
+    image: mongo # image name
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=psw
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo_db
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=psw
+    depends_on:
+      - mongo_db # necessary if this service is dependant on other service, like need that service to start first
+
+
+# 
+# 
+# 
+# if changing this compose config, and wana restart or stop
+# 
+# RUN COMMAND:
+# docker-compose -f mongo-docker-compose.yml down => Stops and removes containers
+# docker-compose -f mongo-docker-compose.yml stop => Stop
+# docker-compose -f mongo-docker-compose.yml start => Re-start stopped

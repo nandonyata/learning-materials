@@ -1,0 +1,17 @@
+Basically this is just the same as "2-docker-compose", 
+but here we also add one more service that is our own GOLANG image
+
+
+https://www.youtube.com/watch?v=SXwC9fSwct8
+
+
+
+ - MONGO_INITDB_ROOT_USERNAME=admin
+ - MONGO_INITDB_ROOT_PASSWORD=psw
+
+ We can replace the hardcoded value for db username & passw by putting environment var ${MONGO_INITDB_ROOT_USERNAME}, then in terminal
+ execute this before starting building the app
+ export MONGO_INITDB_ROOT_USERNAME=admin
+ export MONGO_INITDB_ROOT_PASSWORD=psw
+
+ or for better approach, search about docker compose secret

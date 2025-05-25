@@ -1,0 +1,93 @@
+###Setup files:
+1. Config map
+
+2. secret
+=> values in secret are base64 encoded, we need to encode them first
+=> command: echo -n mongouser | base64 
+=> result: bW9uZ291c2Vy
+=> command: echo -n mongopassword | base64
+=> result: bW9uZ29wYXNzd29yZA==
+
+3. deployment for db (if needed)
+=> deployment and service in 1 file, because they belong together
+
+4. deployment for webapp (if needed)
+=> deployment and service in 1 file, because they belong together
+=> configure external service
+
+=> service types:
+- Default = ClusterIP => an internal service
+- NodePort => external service (we can access externally through browser)
+
+
+
+###Deploy resources in MiniKube Cluster:
+1. command: minikube start --driver=docker
+OR
+command: minikube start --driver=virtualbox
+
+2. command: minikube status
+
+3. command: kubectl get node 
+=> get status of nodes
+
+3. command: kubectl get pod 
+=> get components
+
+4. ConfigMap and Secret must exist before Deployments!!!
+=> command: kubectl apply -f <file-name.yaml> 
+=> "apply" manages application through files defining K8s resources
+=> "f" stands for file
+
+5. Create the deployment
+=> command: kubectl apply -f <file-name.yaml>
+=> NOTES: makesure independence deployment comes first such as DB
+=> then webapp or anything else comes after
+
+6. Delete the deployment/any k8s file config
+=> command: kubect delete -f <file-name.yaml>
+
+
+
+###Interacting with K8s Cluster
+1. kubectl get all
+=> all components that created in the Cluster (deployment, pod, service ...)
+
+2. kubectl get configmap
+3. kubectl get secret
+4. kubectl get pod
+5. kubectl logs <pod-name> || kubectl logs <pod-name> -f
+
+
+
+###Another usefull command:
+1. kubectl delete all --all
+2. kubectl describe <pod_service_any_name>
+3. kubectl delete <pod_service_any_name>
+4. minikube stop
+5. minikube delete
+
+
+
+###How to access web app in the browser???
+1. kubectl get svc
+=> we can see the NodePort port that we are going to access, but which IP?
+=> NodePort service is always accessible at the ip address of the Cluster node,
+so all the workers node that Cluster had.
+In our case we just have one that is MiniKube, so we need the ip address of the minikube.
+
+2. minikube ip
+=> returning the ip of minikube
+=> e.g: 192.168.49.2
+=> access in browser => 
+
+OR
+
+2.a. kubectl get node
+2.a.1. kubectl get node -o wide
+=> for longer output, this will also returning the INTERNAL-IP
+
+3. TBH the 1st and 2nd step doesnt work, looks like we are not suppose to access the internal ip of the minikubee??
+yeah lets find Another way for this later..
+so i found a way to tunneyl it by using
+=> command: minikube service <service-name> --url

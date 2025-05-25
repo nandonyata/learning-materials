@@ -1,0 +1,36 @@
+docker pull mongo
+docker pull mongo-express
+
+
+- use docker network to connect 2 or more containers
+- all containers that using same docker network, 
+- they can connect with each other with just the containers name only (without ports etc, since its in same network)
+- 
+
+docker network create mongo_network
+docker network ls
+
+docker run -d \
+    -p 27017:27017 \
+    --network mongo_network \
+    --name mongo_db \
+	-e MONGO_INITDB_ROOT_USERNAME=admin \
+	-e MONGO_INITDB_ROOT_PASSWORD=psw \
+	mongo
+
+docker run -d \
+    --network mongo_network \
+    --name mongo-express \
+    -p 8081:8081 \
+    -e ME_CONFIG_MONGODB_SERVER="mongo_db" \
+    -e ME_CONFIG_MONGODB_ADMINUSERNAME="admin" \
+    -e ME_CONFIG_MONGODB_ADMINPASSWORD="psw" \
+    mongo-express
+
+
+docker-compose -f mongo-docker-compose.yml up -d
+
+docker build -t test-nando-docker-image:1.0.0 .
+
+docker run -d -p 9002:9002 test-nando-docker-image:1.0.0
+
