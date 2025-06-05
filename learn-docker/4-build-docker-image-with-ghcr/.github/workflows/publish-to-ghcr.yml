@@ -1,0 +1,19 @@
+
+name: Docker Image CI for GHCR
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push
+  push
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and push the image
+        run: |
+          docker login --username nando10xers --password ${{ secrets.GHCR_TESTING_PAT }} ghcr.io
+          docker build . -t ghcr.io/nando10xers/hello-world-ghcr:latest
+          docker push ghcr.io/nando10xers/hello-world-ghcr:latest
