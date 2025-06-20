@@ -1,0 +1,6 @@
+https://kode.wiki/kubernetes-labs
+https://www.youtube.com/watch?v=XuSQU5Grv1g
+
+
+k create namespace vote
+k get deployments.apps --namespace=vote
