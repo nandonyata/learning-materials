@@ -1,0 +1,20 @@
+It's a common pattern in Rest API, to structure the enpoinds according to the views UI. And when the UI and the data specified change,
+most likely the API need to change aswell.
+So with GraphQL, changes on the client side (UI), can be make without any extrawork on the server. This enables faster feedback cycles and product iterations.
+
+In GraphQL, you would only have 1 single endpoints that will be used by all the clients to retrieve the data.
+
+1. Schema
+- schema in simple terms is a collections of GraphQL types ()
+- schema define the capabilities of the API by specifying how a client fetch and update data.
+- schema serves as a contract between client and server to define how the client can access the data.
+Each schema will have some root types such as Query, Mutation, Subscription that defines entrypoint for the API.
+
+2. Queries
+is to fetch data
+
+3. Mutation
+is to write, update and delete data
+
+4. Scalar
+In GraphQL, scalar types represent the primitive, indivisible "leaf" values in a schema. They are the most basic data types that resolve to a single value and cannot have sub-fields, unlike object types.
