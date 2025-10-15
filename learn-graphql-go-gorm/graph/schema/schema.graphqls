@@ -1,0 +1,9 @@
+# We define empty Query and Mutation types in root.graphql,
+# then extend them in each domain file.
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query
+type Mutation

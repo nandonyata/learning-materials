@@ -5,7 +5,6 @@ go 1.25.0
 require (
 	github.com/99designs/gqlgen v0.17.81
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.11.0
 	github.com/vektah/gqlparser/v2 v2.5.30
 	golang.org/x/crypto v0.42.0

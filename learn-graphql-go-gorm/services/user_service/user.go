@@ -6,6 +6,7 @@ import (
 )
 
 type UserServiceInterface interface {
+	FetchByID(id uint) (*models.User, error)
 }
 
 type UserService struct {

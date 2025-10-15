@@ -2,9 +2,12 @@ package middlewares
 
 import (
 	"context"
+	"fmt"
+	"learn-graphql-go-gorm/datalayer/models"
+	"learn-graphql-go-gorm/pkg/jwt"
+	"learn-graphql-go-gorm/services/user_service"
+	"strconv"
 
-	"learn-graphql-go-gorm/internal/pkg/jwt"
-	"learn-graphql-go-gorm/internal/users"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +19,9 @@ type contextKey struct {
 	name string
 }
 
-func Middleware() gin.HandlerFunc {
+func Middleware(
+	userService user_service.UserServiceInterface,
+) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		header := c.GetHeader("Authorization")
@@ -28,21 +33,23 @@ func Middleware() gin.HandlerFunc {
 		}
 
 		// Validate JWT token
-		username, err := jwt.ParseToken(header)
+		userId, err := jwt.ParseToken(header)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Invalid token"})
 			return
 		}
 
 		// Retrieve user from DB
-		user := users.User{Username: username}
-		id, err := users.GetUserIDByUsername(username)
+		userIdInt, err := strconv.Atoi(userId)
 		if err != nil {
-			c.Next()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			return
 		}
-
-		user.ID = uint(id)
+		user, err := userService.FetchByID(uint(userIdInt))
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			return
+		}
 
 		// Store user in context
 		ctx := context.WithValue(c.Request.Context(), userCtxKey, &user)
@@ -54,8 +61,12 @@ func Middleware() gin.HandlerFunc {
 }
 
 // ForContext finds the user from the context. REQUIRES Middleware to have run.
-func ForContext(ctx context.Context) *users.User {
-	raw, _ := ctx.Value(userCtxKey).(*users.User)
+func ForContext(ctx context.Context) (*models.User, error) {
+	raw, ok := ctx.Value(userCtxKey).(*models.User)
 
-	return raw
+	if !ok {
+		return nil, fmt.Errorf("user not found in context")
+	}
+
+	return raw, nil
 }

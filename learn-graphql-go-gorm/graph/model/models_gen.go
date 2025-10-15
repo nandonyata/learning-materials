@@ -2,17 +2,10 @@
 
 package model
 
-type Customer struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
-}
-
-type Link struct {
-	ID      string `json:"id"`
-	Title   string `json:"title"`
-	Address string `json:"address"`
-	User    *User  `json:"user"`
+type CreateProduct struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Quantity    int32  `json:"Quantity"`
 }
 
 type Login struct {
@@ -23,26 +16,26 @@ type Login struct {
 type Mutation struct {
 }
 
-type NewCustomer struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-}
-
-type NewLink struct {
-	Title   string `json:"title"`
-	Address string `json:"address"`
-}
-
-type NewUser struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+type Product struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Quantity    int32  `json:"Quantity"`
+	User        *User  `json:"user"`
 }
 
 type Query struct {
 }
 
-type RefreshTokenInput struct {
-	Token string `json:"token"`
+type Register struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type UpdateProduct struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Quantity    int32  `json:"Quantity"`
 }
 
 type User struct {
