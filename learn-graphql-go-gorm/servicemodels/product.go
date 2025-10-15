@@ -1,9 +1,16 @@
 package servicemodels
 
-type CreateProduct struct {
+type BaseProduct struct {
 	Name        string
 	Description string
 	Quantity    int
 }
 
-type UpdateProduct = CreateProduct
+type CreateProduct struct {
+	BaseProduct
+}
+
+type UpdateProduct struct {
+	ID uint
+	BaseProduct
+}

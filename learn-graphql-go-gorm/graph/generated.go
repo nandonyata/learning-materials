@@ -170,7 +170,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Product.Name(childComplexity), true
-	case "Product.Quantity":
+	case "Product.quantity":
 		if e.complexity.Product.Quantity == nil {
 			break
 		}
@@ -521,8 +521,8 @@ func (ec *executionContext) fieldContext_Mutation_CreateProduct(ctx context.Cont
 				return ec.fieldContext_Product_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Product_description(ctx, field)
-			case "Quantity":
-				return ec.fieldContext_Product_Quantity(ctx, field)
+			case "quantity":
+				return ec.fieldContext_Product_quantity(ctx, field)
 			case "user":
 				return ec.fieldContext_Product_user(ctx, field)
 			}
@@ -574,8 +574,8 @@ func (ec *executionContext) fieldContext_Mutation_UpdateProduct(ctx context.Cont
 				return ec.fieldContext_Product_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Product_description(ctx, field)
-			case "Quantity":
-				return ec.fieldContext_Product_Quantity(ctx, field)
+			case "quantity":
+				return ec.fieldContext_Product_quantity(ctx, field)
 			case "user":
 				return ec.fieldContext_Product_user(ctx, field)
 			}
@@ -765,12 +765,12 @@ func (ec *executionContext) fieldContext_Product_description(_ context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Product_Quantity(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+func (ec *executionContext) _Product_quantity(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Product_Quantity,
+		ec.fieldContext_Product_quantity,
 		func(ctx context.Context) (any, error) {
 			return obj.Quantity, nil
 		},
@@ -781,7 +781,7 @@ func (ec *executionContext) _Product_Quantity(ctx context.Context, field graphql
 	)
 }
 
-func (ec *executionContext) fieldContext_Product_Quantity(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Product_quantity(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Product",
 		Field:      field,
@@ -859,8 +859,8 @@ func (ec *executionContext) fieldContext_Query_GetProducts(_ context.Context, fi
 				return ec.fieldContext_Product_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Product_description(ctx, field)
-			case "Quantity":
-				return ec.fieldContext_Product_Quantity(ctx, field)
+			case "quantity":
+				return ec.fieldContext_Product_quantity(ctx, field)
 			case "user":
 				return ec.fieldContext_Product_user(ctx, field)
 			}
@@ -901,8 +901,8 @@ func (ec *executionContext) fieldContext_Query_GetProductWithID(ctx context.Cont
 				return ec.fieldContext_Product_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Product_description(ctx, field)
-			case "Quantity":
-				return ec.fieldContext_Product_Quantity(ctx, field)
+			case "quantity":
+				return ec.fieldContext_Product_quantity(ctx, field)
 			case "user":
 				return ec.fieldContext_Product_user(ctx, field)
 			}
@@ -2624,7 +2624,7 @@ func (ec *executionContext) unmarshalInputCreateProduct(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "description", "Quantity"}
+	fieldsInOrder := [...]string{"name", "description", "quantity"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -2645,8 +2645,8 @@ func (ec *executionContext) unmarshalInputCreateProduct(ctx context.Context, obj
 				return it, err
 			}
 			it.Description = data
-		case "Quantity":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Quantity"))
+		case "quantity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("quantity"))
 			data, err := ec.unmarshalNInt2int32(ctx, v)
 			if err != nil {
 				return it, err
@@ -2733,13 +2733,20 @@ func (ec *executionContext) unmarshalInputUpdateProduct(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "description", "Quantity"}
+	fieldsInOrder := [...]string{"id", "name", "description", "quantity"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -2754,8 +2761,8 @@ func (ec *executionContext) unmarshalInputUpdateProduct(ctx context.Context, obj
 				return it, err
 			}
 			it.Description = data
-		case "Quantity":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Quantity"))
+		case "quantity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("quantity"))
 			data, err := ec.unmarshalNInt2int32(ctx, v)
 			if err != nil {
 				return it, err
@@ -2871,8 +2878,8 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "Quantity":
-			out.Values[i] = ec._Product_Quantity(ctx, field, obj)
+		case "quantity":
+			out.Values[i] = ec._Product_quantity(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

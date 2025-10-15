@@ -5,7 +5,7 @@ package model
 type CreateProduct struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Quantity    int32  `json:"Quantity"`
+	Quantity    int32  `json:"quantity"`
 }
 
 type Login struct {
@@ -20,7 +20,7 @@ type Product struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Quantity    int32  `json:"Quantity"`
+	Quantity    int32  `json:"quantity"`
 	User        *User  `json:"user"`
 }
 
@@ -33,9 +33,10 @@ type Register struct {
 }
 
 type UpdateProduct struct {
+	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Quantity    int32  `json:"Quantity"`
+	Quantity    int32  `json:"quantity"`
 }
 
 type User struct {

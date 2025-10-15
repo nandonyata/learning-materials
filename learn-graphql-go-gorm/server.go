@@ -7,6 +7,7 @@ import (
 	"learn-graphql-go-gorm/graph/resolvers"
 
 	"learn-graphql-go-gorm/middlewares"
+	"learn-graphql-go-gorm/services/product_service"
 	"learn-graphql-go-gorm/services/user_service"
 	"log"
 	"net/http"
@@ -33,13 +34,16 @@ func main() {
 
 	// Actions
 	userAction := actions.NewUserAction(db)
+	productAction := actions.NewProductAction(db)
 
 	// Services
 	userService := user_service.NewService(userAction)
+	productService := product_service.NewService(productAction)
 
 	// GraphQL resolver
 	resolver := &resolvers.Resolver{
-		UserService: userService,
+		UserService:    userService,
+		ProductService: productService,
 	}
 
 	server := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))

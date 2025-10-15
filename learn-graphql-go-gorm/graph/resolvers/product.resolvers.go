@@ -6,26 +6,77 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
+	"learn-graphql-go-gorm/datalayer/models"
 	"learn-graphql-go-gorm/graph/model"
+	"learn-graphql-go-gorm/middlewares"
+	"learn-graphql-go-gorm/servicemodels"
+	"strconv"
 )
 
 // CreateProduct is the resolver for the CreateProduct field.
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.CreateProduct) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented: CreateProduct - CreateProduct"))
+	user, err := middlewares.ForContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	req := servicemodels.CreateProduct{
+		BaseProduct: servicemodels.BaseProduct{
+			Name:        input.Name,
+			Description: input.Description,
+			Quantity:    int(input.Quantity),
+		},
+	}
+
+	product, err := r.ProductService.Create(ctx, user, req)
+	return product.ProductToGraphQLProduct(), err
 }
 
 // UpdateProduct is the resolver for the UpdateProduct field.
 func (r *mutationResolver) UpdateProduct(ctx context.Context, input model.UpdateProduct) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented: UpdateProduct - UpdateProduct"))
+	_, err := middlewares.ForContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	id, err := strconv.Atoi(input.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	req := servicemodels.UpdateProduct{
+		ID: uint(id),
+		BaseProduct: servicemodels.BaseProduct{
+			Name:        input.Name,
+			Description: input.Description,
+			Quantity:    int(input.Quantity),
+		},
+	}
+
+	product, err := r.ProductService.Update(ctx, req)
+	return product.ProductToGraphQLProduct(), err
 }
 
 // GetProducts is the resolver for the GetProducts field.
 func (r *queryResolver) GetProducts(ctx context.Context) ([]*model.Product, error) {
-	panic(fmt.Errorf("not implemented: GetProducts - GetProducts"))
+	products, err := r.ProductService.GetProductList(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return models.ProductListToGraphQLProductList(products), nil
 }
 
 // GetProductWithID is the resolver for the GetProductWithID field.
 func (r *queryResolver) GetProductWithID(ctx context.Context, id string) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented: GetProductWithID - GetProductWithID"))
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+
+	product, err := r.ProductService.GetProductByID(ctx, uint(idInt))
+	if err != nil {
+		return nil, err
+	}
+
+	return product.ProductToGraphQLProduct(), nil
 }
