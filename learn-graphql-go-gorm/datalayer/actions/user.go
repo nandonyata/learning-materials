@@ -28,9 +28,9 @@ func (r *UserAction) Save(ctx context.Context, user *models.User) error {
 	return r.db.WithContext(ctx).Save(user).Error
 }
 
-func (r *UserAction) FetchByName(ctx context.Context, username string) (*models.User, error) {
+func (r *UserAction) FetchByName(ctx context.Context, name string) (*models.User, error) {
 	var user models.User
-	err := r.db.WithContext(ctx).Where("name = ?", user).First(&user).Error
+	err := r.db.WithContext(ctx).Where("name = ?", name).First(&user).Error
 	return &user, err
 }
 

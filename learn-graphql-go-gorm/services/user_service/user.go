@@ -52,7 +52,7 @@ func (s *UserService) Login(ctx context.Context, req servicemodels.LoginUser) (s
 		return "", nil
 	}
 
-	isValid := user.CheckPasswordHash(req.Password, user.Password)
+	isValid := user.CheckPasswordHash(user.Password, req.Password)
 	if isValid {
 		return "", fmt.Errorf("invalid password")
 	}
