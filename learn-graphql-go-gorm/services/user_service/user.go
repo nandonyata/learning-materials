@@ -65,30 +65,11 @@ func (s *UserService) Login(ctx context.Context, req servicemodels.LoginUser) (s
 // FetchByID fetches a user by ID
 func (s *UserService) FetchByID(ctx context.Context, id uint) (*model.User, error) {
 	user, err := s.userAction.FetchById(ctx, id)
-	return s.userToGraphQLUser(user), err
+	return user.UserToGraphQLUser(), err
 }
 
 // FetchList fetches list of users
 func (s *UserService) FetchList(ctx context.Context) ([]*model.User, error) {
 	users, err := s.userAction.FetchList(ctx)
-	return s.userListToGraphQLUserList(users), err
-}
-
-func (s *UserService) userToGraphQLUser(user *models.User) *model.User {
-	if user == nil {
-		return nil
-	}
-	userGQL := model.User{
-		ID:   fmt.Sprintf("%d", user.ID),
-		Name: user.Name,
-	}
-	return &userGQL
-}
-
-func (s *UserService) userListToGraphQLUserList(users []*models.User) []*model.User {
-	usersGQL := []*model.User{}
-	for _, u := range users {
-		usersGQL = append(usersGQL, s.userToGraphQLUser(u))
-	}
-	return usersGQL
+	return models.UserListToGraphQLUserList(users), err
 }

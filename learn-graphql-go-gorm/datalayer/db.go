@@ -50,6 +50,7 @@ func Migrate() {
 	// Example: add your model structs here
 	err := DB.AutoMigrate(
 		&models.User{},
+		&models.Product{},
 	)
 	if err != nil {
 		log.Fatalf("migration failed: %v", err)
