@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"learn-graphql-go-gorm/datalayer/models"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -48,8 +49,7 @@ func Migrate() {
 
 	// Example: add your model structs here
 	err := DB.AutoMigrate(
-	// &users.User{},
-	// &links.link{},
+		&models.User{},
 	)
 	if err != nil {
 		log.Fatalf("migration failed: %v", err)
