@@ -4,7 +4,7 @@ type User {
 }
 
 extend type Query {
-  GetUsers: [User!]!
+  GetUsers: [User!]
   GetUserWithID(id: ID!): User!
 }
  
