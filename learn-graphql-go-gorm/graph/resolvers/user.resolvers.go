@@ -6,26 +6,54 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 	"learn-graphql-go-gorm/graph/model"
+	"learn-graphql-go-gorm/servicemodels"
+	"strconv"
 )
 
 // Register is the resolver for the Register field.
 func (r *mutationResolver) Register(ctx context.Context, input model.Register) (string, error) {
-	panic(fmt.Errorf("not implemented: Register - Register"))
+	payload := servicemodels.RegisterUser{
+		Name:     input.Name,
+		Password: input.Password,
+	}
+
+	token, err := r.UserService.Register(ctx, payload)
+	return token, err
 }
 
 // Login is the resolver for the Login field.
 func (r *mutationResolver) Login(ctx context.Context, input model.Login) (string, error) {
-	panic(fmt.Errorf("not implemented: Login - Login"))
+	payload := servicemodels.LoginUser{
+		Name:     input.Name,
+		Password: input.Password,
+	}
+
+	token, err := r.UserService.Login(ctx, payload)
+	return token, err
 }
 
 // GetUsers is the resolver for the GetUsers field.
 func (r *queryResolver) GetUsers(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: GetUsers - GetUsers"))
+	users, err := r.UserService.FetchList(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 // GetUserWithID is the resolver for the GetUserWithID field.
 func (r *queryResolver) GetUserWithID(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: GetUserWithID - GetUserWithID"))
+	intId, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := r.UserService.FetchByID(ctx, uint(intId))
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

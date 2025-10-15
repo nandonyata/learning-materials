@@ -9,12 +9,12 @@ extend type Query {
 }
  
 input Register {
-  username: String!
+  name: String!
   password: String!
 }
 
 input Login {
-  username: String!
+  name: String!
   password: String!
 }
 

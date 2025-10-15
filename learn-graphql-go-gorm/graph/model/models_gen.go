@@ -9,7 +9,7 @@ type CreateProduct struct {
 }
 
 type Login struct {
-	Username string `json:"username"`
+	Name     string `json:"name"`
 	Password string `json:"password"`
 }
 
@@ -28,7 +28,7 @@ type Query struct {
 }
 
 type Register struct {
-	Username string `json:"username"`
+	Name     string `json:"name"`
 	Password string `json:"password"`
 }
 

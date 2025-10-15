@@ -1,12 +1,20 @@
 package user_service
 
 import (
+	"context"
+	"fmt"
 	"learn-graphql-go-gorm/datalayer/actions"
 	"learn-graphql-go-gorm/datalayer/models"
+	"learn-graphql-go-gorm/graph/model"
+	"learn-graphql-go-gorm/pkg/jwt"
+	"learn-graphql-go-gorm/servicemodels"
 )
 
 type UserServiceInterface interface {
-	FetchByID(id uint) (*models.User, error)
+	Register(ctx context.Context, req servicemodels.RegisterUser) (string, error)
+	Login(ctx context.Context, req servicemodels.LoginUser) (string, error)
+	FetchByID(ctx context.Context, id uint) (*model.User, error)
+	FetchList(ctx context.Context) ([]*model.User, error)
 }
 
 type UserService struct {
@@ -21,63 +29,66 @@ func NewService(
 	}
 }
 
-// Create inserts a new user into the database with a hashed password
-func (user *UserService) Create() error {
-	// hashedPassword, err := HashPassword(user.Password)
-	// if err != nil {
-	// 	return fmt.Errorf("failed to hash password: %v", err)
-	// }
-	// user.Password = hashedPassword
+// Register inserts a new user into the database with a hashed password
+func (s *UserService) Register(ctx context.Context, req servicemodels.RegisterUser) (string, error) {
+	user := models.User{
+		Name:     req.Name,
+		Password: req.Password,
+	}
 
-	// if err := database.DB.Create(user).Error; err != nil {
-	// 	return fmt.Errorf("failed to create user: %v", err)
-	// }
-	return nil
+	if err := s.userAction.Save(ctx, &user); err != nil {
+		return "", err
+	}
+
+	userIDStr := fmt.Sprintf("%d", user.ID)
+	token, err := jwt.GenerateToken(userIDStr)
+	return token, err
 }
 
-// Authenticate checks if the username and password are valid
-func (user *UserService) Authenticate() (bool, error) {
-	// var existing User
-	// err := database.DB.Where("username = ?", user.Username).First(&existing).Error
+// Login fetch user and validate if the password is valid
+func (s *UserService) Login(ctx context.Context, req servicemodels.LoginUser) (string, error) {
+	user, err := s.userAction.FetchByName(ctx, req.Name)
+	if err != nil {
+		return "", nil
+	}
 
-	// if errors.Is(err, gorm.ErrRecordNotFound) {
-	// 	// user not found
-	// 	return false, nil
-	// }
-	// if err != nil {
-	// 	return false, fmt.Errorf("failed to query user: %v", err)
-	// }
+	isValid := user.CheckPasswordHash(req.Password, user.Password)
+	if isValid {
+		return "", fmt.Errorf("invalid password")
+	}
 
-	// isValid := CheckPasswordHash(user.Password, existing.Password)
-	// return isValid, nil
-	return true, nil
+	userIDStr := fmt.Sprintf("%d", user.ID)
+	token, err := jwt.GenerateToken(userIDStr)
+	return token, err
 }
 
 // FetchByID fetches a user by ID
-func (user *UserService) FetchByID(id uint) (*models.User, error) {
-	// var found User
-	// err := database.DB.First(&found, id).Error
-	// if errors.Is(err, gorm.ErrRecordNotFound) {
-	// 	return nil, nil
-	// }
-	// if err != nil {
-	// 	return nil, fmt.Errorf("failed to fetch user by ID: %v", err)
-	// }
-	// return &found, nil
-	return &models.User{}, nil
+func (s *UserService) FetchByID(ctx context.Context, id uint) (*model.User, error) {
+	user, err := s.userAction.FetchById(ctx, id)
+	return s.userToGraphQLUser(user), err
 }
 
-// GetUserIDByUsername returns the user ID for a given username
-func (userr *UserService) GetUserIDByUsername(username string) (uint, error) {
-	// var user User
-	// err := database.DB.Select("id").Where("username = ?", username).First(&user).Error
-	// if errors.Is(err, gorm.ErrRecordNotFound) {
-	// 	return 0, nil
-	// }
-	// if err != nil {
-	// 	log.Printf("error getting user by username: %v", err)
-	// 	return 0, err
-	// }
-	// return user.ID, nil
-	return 1, nil
+// FetchList fetches list of users
+func (s *UserService) FetchList(ctx context.Context) ([]*model.User, error) {
+	users, err := s.userAction.FetchList(ctx)
+	return s.userListToGraphQLUserList(users), err
+}
+
+func (s *UserService) userToGraphQLUser(user *models.User) *model.User {
+	if user == nil {
+		return nil
+	}
+	userGQL := model.User{
+		ID:   fmt.Sprintf("%d", user.ID),
+		Name: user.Name,
+	}
+	return &userGQL
+}
+
+func (s *UserService) userListToGraphQLUserList(users []*models.User) []*model.User {
+	usersGQL := []*model.User{}
+	for _, u := range users {
+		usersGQL = append(usersGQL, s.userToGraphQLUser(u))
+	}
+	return usersGQL
 }

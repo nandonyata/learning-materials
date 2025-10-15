@@ -45,7 +45,7 @@ func Middleware(
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			return
 		}
-		user, err := userService.FetchByID(uint(userIdInt))
+		user, err := userService.FetchByID(c, uint(userIdInt))
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			return

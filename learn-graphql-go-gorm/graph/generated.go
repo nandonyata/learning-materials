@@ -2665,20 +2665,20 @@ func (ec *executionContext) unmarshalInputLogin(ctx context.Context, obj any) (m
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"username", "password"}
+	fieldsInOrder := [...]string{"name", "password"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "username":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Username = data
+			it.Name = data
 		case "password":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -2699,20 +2699,20 @@ func (ec *executionContext) unmarshalInputRegister(ctx context.Context, obj any)
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"username", "password"}
+	fieldsInOrder := [...]string{"name", "password"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "username":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Username = data
+			it.Name = data
 		case "password":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
 			data, err := ec.unmarshalNString2string(ctx, v)

@@ -1,23 +1,30 @@
 package models
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
+)
 
 type User struct {
 	ID       uint   `json:"id" gorm:"primaryKey;autoIncrement"`
-	Username string `json:"username" gorm:"uniqueIndex;not null"`
+	Name     string `json:"username" gorm:"uniqueIndex;not null"`
 	Password string `json:"password" gorm:"not null"`
 }
 
-// TODO: Use gorm hooks
+// BeforeCreate hooks hash password before inserting to database
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(u.Password), 14)
+	if err != nil {
+		return err
+	}
 
-// HashPassword hashes a given password
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
+	u.Password = string(bytes)
+
+	return nil
 }
 
 // CheckPasswordHash compares a raw password with its hashed value
-func CheckPasswordHash(password, hash string) bool {
+func (u *User) CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
