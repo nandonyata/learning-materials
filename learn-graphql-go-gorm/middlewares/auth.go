@@ -67,7 +67,10 @@ func ForContext(ctx context.Context) (*models.User, error) {
 		return nil, fmt.Errorf("user not found in context")
 	}
 
-	user := raw.(*models.User)
+	user, ok := raw.(*models.User)
+	if !ok {
+		return nil, fmt.Errorf("invalid user type in context")
+	}
 
 	return user, nil
 }
