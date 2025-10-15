@@ -23,7 +23,9 @@ func (p *Product) ProductToGraphQLProduct() *model.Product {
 		Name:        p.Name,
 		Description: p.Description,
 		Quantity:    int32(p.Quantity),
-		User:        p.User.UserToGraphQLUser(),
+	}
+	if p.User != nil {
+		productGQL.User = p.User.UserToGraphQLUser()
 	}
 	return &productGQL
 }

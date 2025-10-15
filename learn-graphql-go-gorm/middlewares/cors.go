@@ -8,7 +8,7 @@ import (
 
 func CORS(c *gin.Context) {
 	host := c.Request.Header.Get("Origin")
-	fmt.Printf("CORS middleware : host: %v", host)
+	fmt.Printf("CORS middleware : host: %v\n", host)
 
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 

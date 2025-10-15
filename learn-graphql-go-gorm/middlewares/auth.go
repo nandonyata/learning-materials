@@ -23,7 +23,6 @@ func Middleware(
 	userService user_service.UserServiceInterface,
 ) gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		header := c.GetHeader("Authorization")
 
 		// Allow unauthenticated access
@@ -52,7 +51,7 @@ func Middleware(
 		}
 
 		// Store user in context
-		ctx := context.WithValue(c.Request.Context(), userCtxKey, &user)
+		ctx := context.WithValue(c.Request.Context(), userCtxKey, user)
 		c.Request = c.Request.WithContext(ctx)
 
 		// Continue
@@ -62,9 +61,9 @@ func Middleware(
 
 // ForContext finds the user from the context. REQUIRES Middleware to have run.
 func ForContext(ctx context.Context) (*models.User, error) {
-	raw, ok := ctx.Value(userCtxKey).(*models.User)
+	raw := ctx.Value(userCtxKey).(*models.User)
 
-	if !ok {
+	if raw == nil {
 		return nil, fmt.Errorf("user not found in context")
 	}
 

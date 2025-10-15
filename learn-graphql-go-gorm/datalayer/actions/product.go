@@ -29,12 +29,17 @@ func (r *ProductAction) Save(ctx context.Context, product *models.Product) error
 
 func (r *ProductAction) FetchById(ctx context.Context, id uint) (*models.Product, error) {
 	var product models.Product
-	err := r.db.WithContext(ctx).Where("id = ?", id).First(&product).Error
+	err := r.db.WithContext(ctx).
+		Preload("User").
+		Where("id = ?", id).
+		First(&product).Error
 	return &product, err
 }
 
 func (r *ProductAction) FetchList(ctx context.Context) ([]*models.Product, error) {
 	var products []*models.Product
-	err := r.db.WithContext(ctx).Find(&products).Error
+	err := r.db.WithContext(ctx).
+		Preload("User").
+		Find(&products).Error
 	return products, err
 }

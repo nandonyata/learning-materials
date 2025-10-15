@@ -33,6 +33,7 @@ func (s *ProductService) Create(ctx context.Context, user *models.User, req serv
 		Description: req.Description,
 		Quantity:    req.Quantity,
 		UserID:      user.ID,
+		User:        user,
 	}
 	err := s.productAction.Save(ctx, &product)
 
