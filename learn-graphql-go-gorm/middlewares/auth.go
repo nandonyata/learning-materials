@@ -61,11 +61,13 @@ func Middleware(
 
 // ForContext finds the user from the context. REQUIRES Middleware to have run.
 func ForContext(ctx context.Context) (*models.User, error) {
-	raw := ctx.Value(userCtxKey).(*models.User)
+	raw := ctx.Value(userCtxKey)
 
 	if raw == nil {
 		return nil, fmt.Errorf("user not found in context")
 	}
 
-	return raw, nil
+	user := raw.(*models.User)
+
+	return user, nil
 }

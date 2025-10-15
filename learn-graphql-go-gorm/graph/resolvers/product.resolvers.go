@@ -15,6 +15,7 @@ import (
 
 // CreateProduct is the resolver for the CreateProduct field.
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.CreateProduct) (*model.Product, error) {
+	// Secure - requires authentication
 	user, err := middlewares.ForContext(ctx)
 	if err != nil {
 		return nil, err
@@ -34,6 +35,7 @@ func (r *mutationResolver) CreateProduct(ctx context.Context, input model.Create
 
 // UpdateProduct is the resolver for the UpdateProduct field.
 func (r *mutationResolver) UpdateProduct(ctx context.Context, input model.UpdateProduct) (*model.Product, error) {
+	// Secure - requires authentication
 	_, err := middlewares.ForContext(ctx)
 	if err != nil {
 		return nil, err
@@ -59,6 +61,7 @@ func (r *mutationResolver) UpdateProduct(ctx context.Context, input model.Update
 
 // GetProducts is the resolver for the GetProducts field.
 func (r *queryResolver) GetProducts(ctx context.Context) ([]*model.Product, error) {
+	// Public - no auth needed
 	products, err := r.ProductService.GetProductList(ctx)
 	if err != nil {
 		return nil, err
@@ -68,6 +71,7 @@ func (r *queryResolver) GetProducts(ctx context.Context) ([]*model.Product, erro
 
 // GetProductWithID is the resolver for the GetProductWithID field.
 func (r *queryResolver) GetProductWithID(ctx context.Context, id string) (*model.Product, error) {
+	// Public - no auth needed
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		return nil, err
