@@ -6,6 +6,7 @@ package resolvers
 
 import (
 	"context"
+	"learn-graphql-go-gorm/datalayer/models"
 	"learn-graphql-go-gorm/graph/model"
 	"learn-graphql-go-gorm/servicemodels"
 	"strconv"
@@ -40,7 +41,7 @@ func (r *queryResolver) GetUsers(ctx context.Context) ([]*model.User, error) {
 		return nil, err
 	}
 
-	return users, nil
+	return models.UserListToGraphQLUserList(users), nil
 }
 
 // GetUserWithID is the resolver for the GetUserWithID field.
@@ -55,5 +56,5 @@ func (r *queryResolver) GetUserWithID(ctx context.Context, id string) (*model.Us
 		return nil, err
 	}
 
-	return user, nil
+	return user.UserToGraphQLUser(), nil
 }

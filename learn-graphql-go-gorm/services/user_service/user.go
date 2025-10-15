@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"learn-graphql-go-gorm/datalayer/actions"
 	"learn-graphql-go-gorm/datalayer/models"
-	"learn-graphql-go-gorm/graph/model"
 	"learn-graphql-go-gorm/pkg/jwt"
 	"learn-graphql-go-gorm/servicemodels"
 )
@@ -13,8 +12,8 @@ import (
 type UserServiceInterface interface {
 	Register(ctx context.Context, req servicemodels.RegisterUser) (string, error)
 	Login(ctx context.Context, req servicemodels.LoginUser) (string, error)
-	FetchByID(ctx context.Context, id uint) (*model.User, error)
-	FetchList(ctx context.Context) ([]*model.User, error)
+	FetchByID(ctx context.Context, id uint) (*models.User, error)
+	FetchList(ctx context.Context) ([]*models.User, error)
 }
 
 type UserService struct {
@@ -63,13 +62,13 @@ func (s *UserService) Login(ctx context.Context, req servicemodels.LoginUser) (s
 }
 
 // FetchByID fetches a user by ID
-func (s *UserService) FetchByID(ctx context.Context, id uint) (*model.User, error) {
+func (s *UserService) FetchByID(ctx context.Context, id uint) (*models.User, error) {
 	user, err := s.userAction.FetchById(ctx, id)
-	return user.UserToGraphQLUser(), err
+	return user, err
 }
 
 // FetchList fetches list of users
-func (s *UserService) FetchList(ctx context.Context) ([]*model.User, error) {
+func (s *UserService) FetchList(ctx context.Context) ([]*models.User, error) {
 	users, err := s.userAction.FetchList(ctx)
-	return models.UserListToGraphQLUserList(users), err
+	return users, err
 }
