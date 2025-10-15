@@ -2,10 +2,15 @@
 
 package model
 
+import (
+	"learn-graphql-go-gorm/graph/scalars"
+)
+
 type CreateProduct struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Quantity    int32  `json:"quantity"`
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	Quantity    int32         `json:"quantity"`
+	ExpiredDate *scalars.Date `json:"expiredDate,omitempty"`
 }
 
 type Login struct {
@@ -17,11 +22,12 @@ type Mutation struct {
 }
 
 type Product struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Quantity    int32  `json:"quantity"`
-	User        *User  `json:"user"`
+	ID          string        `json:"id"`
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	Quantity    int32         `json:"quantity"`
+	ExpiredDate *scalars.Date `json:"expiredDate,omitempty"`
+	User        *User         `json:"user"`
 }
 
 type Query struct {
@@ -33,10 +39,11 @@ type Register struct {
 }
 
 type UpdateProduct struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Quantity    int32  `json:"quantity"`
+	ID          string        `json:"id"`
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	Quantity    int32         `json:"quantity"`
+	ExpiredDate *scalars.Date `json:"expiredDate,omitempty"`
 }
 
 type User struct {

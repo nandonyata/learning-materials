@@ -1,0 +1,7 @@
+# Custom scalar types that can be reused across all schemas
+
+"""
+Date scalar type represents a date in YYYY-MM-DD format (ISO 8601)
+Example: "2025-10-15"
+"""
+scalar Date

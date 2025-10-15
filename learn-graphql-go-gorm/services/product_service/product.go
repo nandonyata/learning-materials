@@ -32,6 +32,7 @@ func (s *ProductService) Create(ctx context.Context, user *models.User, req serv
 		Name:        req.Name,
 		Description: req.Description,
 		Quantity:    req.Quantity,
+		ExpiredDate: req.ExpiredDate,
 		UserID:      user.ID,
 		User:        user,
 	}
@@ -55,6 +56,7 @@ func (s *ProductService) Update(ctx context.Context, req servicemodels.UpdatePro
 	product.Name = req.Name
 	product.Description = req.Description
 	product.Quantity = req.Quantity
+	product.ExpiredDate = req.ExpiredDate
 
 	err = s.productAction.Save(ctx, product)
 

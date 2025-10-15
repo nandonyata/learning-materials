@@ -161,6 +161,11 @@ models:
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
 
+  # Add the Date scalar mapping
+  Date:
+    model:
+      - learn-graphql-go-gorm/graph/scalars.Date
+
 # Add this section after the models section
 directives:
   auth:

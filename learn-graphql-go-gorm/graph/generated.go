@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"learn-graphql-go-gorm/graph/model"
+	"learn-graphql-go-gorm/graph/scalars"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -57,6 +58,7 @@ type ComplexityRoot struct {
 
 	Product struct {
 		Description func(childComplexity int) int
+		ExpiredDate func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Name        func(childComplexity int) int
 		Quantity    func(childComplexity int) int
@@ -159,6 +161,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Product.Description(childComplexity), true
+	case "Product.expiredDate":
+		if e.complexity.Product.ExpiredDate == nil {
+			break
+		}
+
+		return e.complexity.Product.ExpiredDate(childComplexity), true
 	case "Product.id":
 		if e.complexity.Product.ID == nil {
 			break
@@ -340,7 +348,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "schema/directive.graphqls" "schema/product.graphqls" "schema/schema.graphqls" "schema/user.graphqls"
+//go:embed "schema/directive.graphqls" "schema/product.graphqls" "schema/scalars.graphqls" "schema/schema.graphqls" "schema/user.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -354,6 +362,7 @@ func sourceData(filename string) string {
 var sources = []*ast.Source{
 	{Name: "schema/directive.graphqls", Input: sourceData("schema/directive.graphqls"), BuiltIn: false},
 	{Name: "schema/product.graphqls", Input: sourceData("schema/product.graphqls"), BuiltIn: false},
+	{Name: "schema/scalars.graphqls", Input: sourceData("schema/scalars.graphqls"), BuiltIn: false},
 	{Name: "schema/schema.graphqls", Input: sourceData("schema/schema.graphqls"), BuiltIn: false},
 	{Name: "schema/user.graphqls", Input: sourceData("schema/user.graphqls"), BuiltIn: false},
 }
@@ -538,6 +547,8 @@ func (ec *executionContext) fieldContext_Mutation_CreateProduct(ctx context.Cont
 				return ec.fieldContext_Product_description(ctx, field)
 			case "quantity":
 				return ec.fieldContext_Product_quantity(ctx, field)
+			case "expiredDate":
+				return ec.fieldContext_Product_expiredDate(ctx, field)
 			case "user":
 				return ec.fieldContext_Product_user(ctx, field)
 			}
@@ -604,6 +615,8 @@ func (ec *executionContext) fieldContext_Mutation_UpdateProduct(ctx context.Cont
 				return ec.fieldContext_Product_description(ctx, field)
 			case "quantity":
 				return ec.fieldContext_Product_quantity(ctx, field)
+			case "expiredDate":
+				return ec.fieldContext_Product_expiredDate(ctx, field)
 			case "user":
 				return ec.fieldContext_Product_user(ctx, field)
 			}
@@ -822,6 +835,35 @@ func (ec *executionContext) fieldContext_Product_quantity(_ context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _Product_expiredDate(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Product_expiredDate,
+		func(ctx context.Context) (any, error) {
+			return obj.ExpiredDate, nil
+		},
+		nil,
+		ec.marshalODate2ᚖlearnᚑgraphqlᚑgoᚑgormᚋgraphᚋscalarsᚐDate,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Product_expiredDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Date does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Product_user(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -889,6 +931,8 @@ func (ec *executionContext) fieldContext_Query_GetProducts(_ context.Context, fi
 				return ec.fieldContext_Product_description(ctx, field)
 			case "quantity":
 				return ec.fieldContext_Product_quantity(ctx, field)
+			case "expiredDate":
+				return ec.fieldContext_Product_expiredDate(ctx, field)
 			case "user":
 				return ec.fieldContext_Product_user(ctx, field)
 			}
@@ -931,6 +975,8 @@ func (ec *executionContext) fieldContext_Query_GetProductWithID(ctx context.Cont
 				return ec.fieldContext_Product_description(ctx, field)
 			case "quantity":
 				return ec.fieldContext_Product_quantity(ctx, field)
+			case "expiredDate":
+				return ec.fieldContext_Product_expiredDate(ctx, field)
 			case "user":
 				return ec.fieldContext_Product_user(ctx, field)
 			}
@@ -2652,7 +2698,7 @@ func (ec *executionContext) unmarshalInputCreateProduct(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "description", "quantity"}
+	fieldsInOrder := [...]string{"name", "description", "quantity", "expiredDate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -2680,6 +2726,13 @@ func (ec *executionContext) unmarshalInputCreateProduct(ctx context.Context, obj
 				return it, err
 			}
 			it.Quantity = data
+		case "expiredDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiredDate"))
+			data, err := ec.unmarshalODate2ᚖlearnᚑgraphqlᚑgoᚑgormᚋgraphᚋscalarsᚐDate(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiredDate = data
 		}
 	}
 
@@ -2761,7 +2814,7 @@ func (ec *executionContext) unmarshalInputUpdateProduct(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"id", "name", "description", "quantity"}
+	fieldsInOrder := [...]string{"id", "name", "description", "quantity", "expiredDate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -2796,6 +2849,13 @@ func (ec *executionContext) unmarshalInputUpdateProduct(ctx context.Context, obj
 				return it, err
 			}
 			it.Quantity = data
+		case "expiredDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiredDate"))
+			data, err := ec.unmarshalODate2ᚖlearnᚑgraphqlᚑgoᚑgormᚋgraphᚋscalarsᚐDate(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiredDate = data
 		}
 	}
 
@@ -2911,6 +2971,8 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "expiredDate":
+			out.Values[i] = ec._Product_expiredDate(ctx, field, obj)
 		case "user":
 			out.Values[i] = ec._Product_user(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -3842,6 +3904,24 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	_ = sel
 	_ = ctx
 	res := graphql.MarshalBoolean(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalODate2ᚖlearnᚑgraphqlᚑgoᚑgormᚋgraphᚋscalarsᚐDate(ctx context.Context, v any) (*scalars.Date, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := scalars.UnmarshalDate(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalODate2ᚖlearnᚑgraphqlᚑgoᚑgormᚋgraphᚋscalarsᚐDate(ctx context.Context, sel ast.SelectionSet, v *scalars.Date) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := scalars.MarshalDate(*v)
 	return res
 }
 

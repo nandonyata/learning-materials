@@ -3,6 +3,7 @@ type Product {
   name: String!
   description: String!
   quantity: Int!
+  expiredDate: Date
 
   user: User!
 }
@@ -16,6 +17,7 @@ input CreateProduct {
   name: String!
   description: String!
   quantity: Int!
+  expiredDate: Date
 }
 
 input UpdateProduct {
@@ -23,6 +25,7 @@ input UpdateProduct {
   name: String!
   description: String!
   quantity: Int!
+  expiredDate: Date
 }
 
 extend type Mutation {

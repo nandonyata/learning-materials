@@ -26,6 +26,7 @@ func (r *mutationResolver) CreateProduct(ctx context.Context, input model.Create
 			Name:        input.Name,
 			Description: input.Description,
 			Quantity:    int(input.Quantity),
+			ExpiredDate: &input.ExpiredDate.Time,
 		},
 	}
 
@@ -52,6 +53,7 @@ func (r *mutationResolver) UpdateProduct(ctx context.Context, input model.Update
 			Name:        input.Name,
 			Description: input.Description,
 			Quantity:    int(input.Quantity),
+			ExpiredDate: &input.ExpiredDate.Time,
 		},
 	}
 
