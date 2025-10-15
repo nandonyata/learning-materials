@@ -4,6 +4,7 @@ import (
 	database "learn-graphql-go-gorm/datalayer"
 	"learn-graphql-go-gorm/datalayer/actions"
 	"learn-graphql-go-gorm/graph"
+	"learn-graphql-go-gorm/graph/directives"
 	"learn-graphql-go-gorm/graph/resolvers"
 
 	"learn-graphql-go-gorm/middlewares"
@@ -46,7 +47,16 @@ func main() {
 		ProductService: productService,
 	}
 
-	server := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
+	// Create GraphQL config with directive
+	config := graph.Config{
+		Resolvers: resolver,
+		Directives: graph.DirectiveRoot{
+			Auth: directives.Auth,
+		},
+	}
+
+	// server := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
+	server := handler.NewDefaultServer(graph.NewExecutableSchema(config))
 
 	// Router
 	router := gin.Default()

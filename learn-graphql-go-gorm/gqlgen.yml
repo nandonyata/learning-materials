@@ -160,3 +160,8 @@ models:
     model:
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
+
+# Add this section after the models section
+directives:
+  auth:
+    skip_runtime: false

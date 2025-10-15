@@ -26,6 +26,6 @@ input UpdateProduct {
 }
 
 extend type Mutation {
-  CreateProduct(input: CreateProduct!): Product!
-  UpdateProduct(input: UpdateProduct!): Product!
+  CreateProduct(input: CreateProduct!): Product! @auth
+  UpdateProduct(input: UpdateProduct!): Product! @auth
 }
