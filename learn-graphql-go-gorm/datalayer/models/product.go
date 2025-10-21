@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"learn-graphql-go-gorm/graph/model"
 	"learn-graphql-go-gorm/graph/scalars"
+	"learn-graphql-go-gorm/servicemodels"
+	"math"
 	"time"
 
 	"gorm.io/gorm"
@@ -40,4 +42,17 @@ func ProductListToGraphQLProductList(products []*Product) []*model.Product {
 		productsGQL = append(productsGQL, p.ProductToGraphQLProduct())
 	}
 	return productsGQL
+}
+
+func ProductListToPaginatedProducts(products []*Product, query servicemodels.ProductQuery) model.PaginatedProducts {
+	response := model.PaginatedProducts{
+		Products: ProductListToGraphQLProductList(products),
+		Pagination: &model.PaginationInfo{
+			TotalPages:  int32(math.Ceil(float64(query.TotalData) / float64(query.GetLimit()))),
+			TotalData:   int32(query.TotalData),
+			HasNextPage: int(query.TotalData) > (query.GetLimit() + query.GetOffset()),
+		},
+	}
+
+	return response
 }

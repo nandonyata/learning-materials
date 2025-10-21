@@ -17,3 +17,7 @@ type UpdateProduct struct {
 	ID uint
 	BaseProduct
 }
+
+type ProductQuery struct {
+	PaginationRequest
+}

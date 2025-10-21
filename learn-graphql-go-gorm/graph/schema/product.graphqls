@@ -8,9 +8,29 @@ type Product {
   user: User!
 }
 
+# Add pagination input type
+input PaginationInput {
+  page: Int! = 1
+  limit: Int! = 10
+}
+
+# Add pagination info type
+type PaginationInfo {
+  totalData: Int!
+  totalPages: Int!
+  hasNextPage: Boolean!
+}
+
+# Add paginated product response type
+type PaginatedProducts {
+  products: [Product!]
+  pagination: PaginationInfo!
+}
+
 extend type Query {
   GetProducts: [Product!]
   GetProductWithID(id: ID!): Product!
+  GetProductsPagination(pagination: PaginationInput): PaginatedProducts!
 }
 
 input CreateProduct {

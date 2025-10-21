@@ -64,7 +64,7 @@ func (r *mutationResolver) UpdateProduct(ctx context.Context, input model.Update
 // GetProducts is the resolver for the GetProducts field.
 func (r *queryResolver) GetProducts(ctx context.Context) ([]*model.Product, error) {
 	// Public - no auth needed
-	products, err := r.ProductService.GetProductList(ctx)
+	products, err := r.ProductService.GetProductList(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -85,4 +85,21 @@ func (r *queryResolver) GetProductWithID(ctx context.Context, id string) (*model
 	}
 
 	return product.ProductToGraphQLProduct(), nil
+}
+
+// GetProductsPagination is the resolver for the GetProductsPagination field.
+func (r *queryResolver) GetProductsPagination(ctx context.Context, pagination *model.PaginationInput) (*model.PaginatedProducts, error) {
+	// Public - no auth needed
+	query := servicemodels.ProductQuery{
+		PaginationRequest: servicemodels.PaginationRequest{PageNo: int(pagination.Page), PerPage: int(pagination.Limit)},
+	}
+
+	products, err := r.ProductService.GetProductList(ctx, &query)
+	if err != nil {
+		return nil, err
+	}
+
+	response := models.ProductListToPaginatedProducts(products, query)
+
+	return &response, nil
 }

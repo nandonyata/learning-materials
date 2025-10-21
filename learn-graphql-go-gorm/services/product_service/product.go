@@ -5,13 +5,15 @@ import (
 	"learn-graphql-go-gorm/datalayer/actions"
 	"learn-graphql-go-gorm/datalayer/models"
 	"learn-graphql-go-gorm/servicemodels"
+
+	"gorm.io/gorm"
 )
 
 type ProductServiceInterface interface {
 	Create(ctx context.Context, user *models.User, req servicemodels.CreateProduct) (*models.Product, error)
 	GetProductByID(ctx context.Context, id uint) (*models.Product, error)
 	Update(ctx context.Context, req servicemodels.UpdateProduct) (*models.Product, error)
-	GetProductList(ctx context.Context) ([]*models.Product, error)
+	GetProductList(ctx context.Context, query *servicemodels.ProductQuery) ([]*models.Product, error)
 }
 
 type ProductService struct {
@@ -63,8 +65,22 @@ func (s *ProductService) Update(ctx context.Context, req servicemodels.UpdatePro
 	return product, err
 }
 
-// GetProductList fetches all products
-func (s *ProductService) GetProductList(ctx context.Context) ([]*models.Product, error) {
-	products, err := s.productAction.FetchList(ctx)
+// GetProductList fetches products based on query filter
+func (s *ProductService) GetProductList(ctx context.Context, query *servicemodels.ProductQuery) ([]*models.Product, error) {
+	var (
+		products []*models.Product
+		err      error
+		filters  = []func(*gorm.DB) *gorm.DB{}
+	)
+
+	if query.IsPaginationApplicable() {
+		if query.TotalData, err = s.productAction.Count(ctx, filters...); err != nil {
+			return nil, err
+		}
+
+		filters = append(filters, servicemodels.WithPagination(query.PaginationRequest))
+	}
+
+	products, err = s.productAction.FetchList(ctx, filters...)
 	return products, err
 }

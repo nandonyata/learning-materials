@@ -21,6 +21,22 @@ type Login struct {
 type Mutation struct {
 }
 
+type PaginatedProducts struct {
+	Products   []*Product      `json:"products,omitempty"`
+	Pagination *PaginationInfo `json:"pagination"`
+}
+
+type PaginationInfo struct {
+	TotalData   int32 `json:"totalData"`
+	TotalPages  int32 `json:"totalPages"`
+	HasNextPage bool  `json:"hasNextPage"`
+}
+
+type PaginationInput struct {
+	Page  int32 `json:"page"`
+	Limit int32 `json:"limit"`
+}
+
 type Product struct {
 	ID          string        `json:"id"`
 	Name        string        `json:"name"`
