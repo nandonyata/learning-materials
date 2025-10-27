@@ -4,6 +4,7 @@ import (
 	"context"
 	"learn-graphql-go-gorm/datalayer/actions"
 	"learn-graphql-go-gorm/datalayer/models"
+	"learn-graphql-go-gorm/graph/model"
 	"learn-graphql-go-gorm/servicemodels"
 
 	"gorm.io/gorm"
@@ -17,6 +18,7 @@ type ProductServiceInterface interface {
 }
 
 type ProductService struct {
+	broadcaster   *EventBroadcaster
 	productAction actions.ProductActionInterface
 }
 
@@ -24,6 +26,7 @@ func NewService(
 	productAction actions.ProductActionInterface,
 ) ProductServiceInterface {
 	return &ProductService{
+		broadcaster:   GetBroadcaster(),
 		productAction: productAction,
 	}
 }
@@ -39,6 +42,10 @@ func (s *ProductService) Create(ctx context.Context, user *models.User, req serv
 		User:        user,
 	}
 	err := s.productAction.Save(ctx, &product)
+
+	if err == nil {
+		s.broadcaster.BroadcastProductChange(model.ProductActionCreated, &product)
+	}
 
 	return &product, err
 }

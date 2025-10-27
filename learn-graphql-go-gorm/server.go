@@ -15,8 +15,11 @@ import (
 	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/extension"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
 const defaultPort = "8080"
@@ -55,21 +58,40 @@ func main() {
 		},
 	}
 
-	// server := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
-	server := handler.NewDefaultServer(graph.NewExecutableSchema(config))
+	// Create GraphQL server with WebSocket support
+	srv := handler.New(graph.NewExecutableSchema(config))
+
+	// Add transports
+	srv.AddTransport(transport.POST{})    // For queries and mutations
+	srv.AddTransport(transport.Websocket{ // For subscriptions
+		KeepAlivePingInterval: 10, // Ping every 10 seconds to keep connection alive
+		Upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool {
+				// Allow all origins for development
+				// In production, check against your frontend URL
+				return true
+			},
+		},
+	})
+
+	// Add extensions
+	srv.Use(extension.Introspection{})
 
 	// Router
 	router := gin.Default()
 	router.Use(middlewares.CORS)
 	router.Use(middlewares.Middleware(userService))
 
+	// Playground
 	router.GET("/", func(c *gin.Context) {
 		playground.Handler("GraphQL Playground", "/query").ServeHTTP(c.Writer, c.Request)
 	})
-	router.POST("/query", func(c *gin.Context) {
-		server.ServeHTTP(c.Writer, c.Request)
-	})
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	// GraphQL endpoint - handles queries, mutations (POST) and subscriptions (GET for WebSocket upgrade)
+	router.POST("/query", gin.WrapH(srv))
+	router.GET("/query", gin.WrapH(srv)) // NEW: For WebSocket connections
+
+	log.Printf("🚀 Server ready at http://localhost:%s/", port)
+	log.Printf("📡 Subscriptions ready at ws://localhost:%s/query", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }

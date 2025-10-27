@@ -3,7 +3,11 @@
 package model
 
 import (
+	"bytes"
+	"fmt"
+	"io"
 	"learn-graphql-go-gorm/graph/scalars"
+	"strconv"
 )
 
 type CreateProduct struct {
@@ -46,12 +50,21 @@ type Product struct {
 	User        *User         `json:"user"`
 }
 
+type ProductChangeEvent struct {
+	Action    ProductAction `json:"action"`
+	Product   *Product      `json:"product"`
+	Timestamp string        `json:"timestamp"`
+}
+
 type Query struct {
 }
 
 type Register struct {
 	Name     string `json:"name"`
 	Password string `json:"password"`
+}
+
+type Subscription struct {
 }
 
 type UpdateProduct struct {
@@ -65,4 +78,59 @@ type UpdateProduct struct {
 type User struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+type ProductAction string
+
+const (
+	ProductActionCreated ProductAction = "CREATED"
+	ProductActionUpdated ProductAction = "UPDATED"
+)
+
+var AllProductAction = []ProductAction{
+	ProductActionCreated,
+	ProductActionUpdated,
+}
+
+func (e ProductAction) IsValid() bool {
+	switch e {
+	case ProductActionCreated, ProductActionUpdated:
+		return true
+	}
+	return false
+}
+
+func (e ProductAction) String() string {
+	return string(e)
+}
+
+func (e *ProductAction) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ProductAction(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ProductAction", str)
+	}
+	return nil
+}
+
+func (e ProductAction) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ProductAction) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ProductAction) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }

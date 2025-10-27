@@ -42,6 +42,7 @@ type Config struct {
 type ResolverRoot interface {
 	Mutation() MutationResolver
 	Query() QueryResolver
+	Subscription() SubscriptionResolver
 }
 
 type DirectiveRoot struct {
@@ -76,12 +77,22 @@ type ComplexityRoot struct {
 		User        func(childComplexity int) int
 	}
 
+	ProductChangeEvent struct {
+		Action    func(childComplexity int) int
+		Product   func(childComplexity int) int
+		Timestamp func(childComplexity int) int
+	}
+
 	Query struct {
 		GetProductWithID      func(childComplexity int, id string) int
 		GetProducts           func(childComplexity int) int
 		GetProductsPagination func(childComplexity int, pagination *model.PaginationInput) int
 		GetUserWithID         func(childComplexity int, id string) int
 		GetUsers              func(childComplexity int) int
+	}
+
+	Subscription struct {
+		ProductChanged func(childComplexity int) int
 	}
 
 	User struct {
@@ -102,6 +113,9 @@ type QueryResolver interface {
 	GetProductsPagination(ctx context.Context, pagination *model.PaginationInput) (*model.PaginatedProducts, error)
 	GetUsers(ctx context.Context) ([]*model.User, error)
 	GetUserWithID(ctx context.Context, id string) (*model.User, error)
+}
+type SubscriptionResolver interface {
+	ProductChanged(ctx context.Context) (<-chan *model.ProductChangeEvent, error)
 }
 
 type executableSchema struct {
@@ -237,6 +251,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Product.User(childComplexity), true
 
+	case "ProductChangeEvent.action":
+		if e.complexity.ProductChangeEvent.Action == nil {
+			break
+		}
+
+		return e.complexity.ProductChangeEvent.Action(childComplexity), true
+	case "ProductChangeEvent.product":
+		if e.complexity.ProductChangeEvent.Product == nil {
+			break
+		}
+
+		return e.complexity.ProductChangeEvent.Product(childComplexity), true
+	case "ProductChangeEvent.timestamp":
+		if e.complexity.ProductChangeEvent.Timestamp == nil {
+			break
+		}
+
+		return e.complexity.ProductChangeEvent.Timestamp(childComplexity), true
+
 	case "Query.GetProductWithID":
 		if e.complexity.Query.GetProductWithID == nil {
 			break
@@ -282,6 +315,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.GetUsers(childComplexity), true
+
+	case "Subscription.productChanged":
+		if e.complexity.Subscription.ProductChanged == nil {
+			break
+		}
+
+		return e.complexity.Subscription.ProductChanged(childComplexity), true
 
 	case "User.id":
 		if e.complexity.User.ID == nil {
@@ -358,6 +398,23 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 				Data: buf.Bytes(),
 			}
 		}
+	case ast.Subscription:
+		next := ec._Subscription(ctx, opCtx.Operation.SelectionSet)
+
+		var buf bytes.Buffer
+		return func(ctx context.Context) *graphql.Response {
+			buf.Reset()
+			data := next(ctx)
+
+			if data == nil {
+				return nil
+			}
+			data.MarshalGQL(&buf)
+
+			return &graphql.Response{
+				Data: buf.Bytes(),
+			}
+		}
 
 	default:
 		return graphql.OneShot(graphql.ErrorResponse(ctx, "unsupported GraphQL operation"))
@@ -405,7 +462,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "schema/directive.graphqls" "schema/product.graphqls" "schema/scalars.graphqls" "schema/schema.graphqls" "schema/user.graphqls"
+//go:embed "schema/directive.graphqls" "schema/product.graphqls" "schema/product_subscription.graphqls" "schema/scalars.graphqls" "schema/schema.graphqls" "schema/user.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -419,6 +476,7 @@ func sourceData(filename string) string {
 var sources = []*ast.Source{
 	{Name: "schema/directive.graphqls", Input: sourceData("schema/directive.graphqls"), BuiltIn: false},
 	{Name: "schema/product.graphqls", Input: sourceData("schema/product.graphqls"), BuiltIn: false},
+	{Name: "schema/product_subscription.graphqls", Input: sourceData("schema/product_subscription.graphqls"), BuiltIn: false},
 	{Name: "schema/scalars.graphqls", Input: sourceData("schema/scalars.graphqls"), BuiltIn: false},
 	{Name: "schema/schema.graphqls", Input: sourceData("schema/schema.graphqls"), BuiltIn: false},
 	{Name: "schema/user.graphqls", Input: sourceData("schema/user.graphqls"), BuiltIn: false},
@@ -1134,6 +1192,107 @@ func (ec *executionContext) fieldContext_Product_user(_ context.Context, field g
 	return fc, nil
 }
 
+func (ec *executionContext) _ProductChangeEvent_action(ctx context.Context, field graphql.CollectedField, obj *model.ProductChangeEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProductChangeEvent_action,
+		func(ctx context.Context) (any, error) {
+			return obj.Action, nil
+		},
+		nil,
+		ec.marshalNProductAction2learnᚑgraphqlᚑgoᚑgormᚋgraphᚋmodelᚐProductAction,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ProductChangeEvent_action(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductChangeEvent",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ProductAction does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductChangeEvent_product(ctx context.Context, field graphql.CollectedField, obj *model.ProductChangeEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProductChangeEvent_product,
+		func(ctx context.Context) (any, error) {
+			return obj.Product, nil
+		},
+		nil,
+		ec.marshalNProduct2ᚖlearnᚑgraphqlᚑgoᚑgormᚋgraphᚋmodelᚐProduct,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ProductChangeEvent_product(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductChangeEvent",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Product_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Product_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Product_description(ctx, field)
+			case "quantity":
+				return ec.fieldContext_Product_quantity(ctx, field)
+			case "expiredDate":
+				return ec.fieldContext_Product_expiredDate(ctx, field)
+			case "user":
+				return ec.fieldContext_Product_user(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Product", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductChangeEvent_timestamp(ctx context.Context, field graphql.CollectedField, obj *model.ProductChangeEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProductChangeEvent_timestamp,
+		func(ctx context.Context) (any, error) {
+			return obj.Timestamp, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ProductChangeEvent_timestamp(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductChangeEvent",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_GetProducts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1464,6 +1623,43 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 				return ec.fieldContext___Schema_directives(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Subscription_productChanged(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
+	return graphql.ResolveFieldStream(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Subscription_productChanged,
+		func(ctx context.Context) (any, error) {
+			return ec.resolvers.Subscription().ProductChanged(ctx)
+		},
+		nil,
+		ec.marshalNProductChangeEvent2ᚖlearnᚑgraphqlᚑgoᚑgormᚋgraphᚋmodelᚐProductChangeEvent,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Subscription_productChanged(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subscription",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "action":
+				return ec.fieldContext_ProductChangeEvent_action(ctx, field)
+			case "product":
+				return ec.fieldContext_ProductChangeEvent_product(ctx, field)
+			case "timestamp":
+				return ec.fieldContext_ProductChangeEvent_timestamp(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProductChangeEvent", field.Name)
 		},
 	}
 	return fc, nil
@@ -3414,6 +3610,55 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 	return out
 }
 
+var productChangeEventImplementors = []string{"ProductChangeEvent"}
+
+func (ec *executionContext) _ProductChangeEvent(ctx context.Context, sel ast.SelectionSet, obj *model.ProductChangeEvent) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, productChangeEventImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProductChangeEvent")
+		case "action":
+			out.Values[i] = ec._ProductChangeEvent_action(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "product":
+			out.Values[i] = ec._ProductChangeEvent_product(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "timestamp":
+			out.Values[i] = ec._ProductChangeEvent_timestamp(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -3566,6 +3811,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	}
 
 	return out
+}
+
+var subscriptionImplementors = []string{"Subscription"}
+
+func (ec *executionContext) _Subscription(ctx context.Context, sel ast.SelectionSet) func(ctx context.Context) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subscriptionImplementors)
+	ctx = graphql.WithFieldContext(ctx, &graphql.FieldContext{
+		Object: "Subscription",
+	})
+	if len(fields) != 1 {
+		ec.Errorf(ctx, "must subscribe to exactly one stream")
+		return nil
+	}
+
+	switch fields[0].Name {
+	case "productChanged":
+		return ec._Subscription_productChanged(ctx, fields[0])
+	default:
+		panic("unknown field " + strconv.Quote(fields[0].Name))
+	}
 }
 
 var userImplementors = []string{"User"}
@@ -4041,6 +4306,30 @@ func (ec *executionContext) marshalNProduct2ᚖlearnᚑgraphqlᚑgoᚑgormᚋgra
 		return graphql.Null
 	}
 	return ec._Product(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNProductAction2learnᚑgraphqlᚑgoᚑgormᚋgraphᚋmodelᚐProductAction(ctx context.Context, v any) (model.ProductAction, error) {
+	var res model.ProductAction
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNProductAction2learnᚑgraphqlᚑgoᚑgormᚋgraphᚋmodelᚐProductAction(ctx context.Context, sel ast.SelectionSet, v model.ProductAction) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) marshalNProductChangeEvent2learnᚑgraphqlᚑgoᚑgormᚋgraphᚋmodelᚐProductChangeEvent(ctx context.Context, sel ast.SelectionSet, v model.ProductChangeEvent) graphql.Marshaler {
+	return ec._ProductChangeEvent(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProductChangeEvent2ᚖlearnᚑgraphqlᚑgoᚑgormᚋgraphᚋmodelᚐProductChangeEvent(ctx context.Context, sel ast.SelectionSet, v *model.ProductChangeEvent) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProductChangeEvent(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNRegister2learnᚑgraphqlᚑgoᚑgormᚋgraphᚋmodelᚐRegister(ctx context.Context, v any) (model.Register, error) {

@@ -1,0 +1,15 @@
+extend type Subscription {
+  # Subscribe to product changes (create/update)
+  productChanged: ProductChangeEvent!
+}
+
+type ProductChangeEvent {
+  action: ProductAction!
+  product: Product!
+  timestamp: String!
+}
+
+enum ProductAction {
+  CREATED
+  UPDATED
+}
