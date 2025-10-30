@@ -37,19 +37,66 @@ func (s *BlogItemService) CreateBlog(ctx context.Context, in *proto.Blog) (*prot
 		return nil, err
 	}
 
-	fmt.Printf("CreateBlog: new blog created with id %d\n", data.ID)
-
 	return &proto.BlogId{Id: int32(data.ID)}, nil
 }
+
 func (s *BlogItemService) GetOneBlog(ctx context.Context, in *proto.BlogId) (*proto.Blog, error) {
-	return nil, nil
+	fmt.Println("GetOneBlog: new request")
+
+	blogItem, err := s.blogItemAction.FetchById(ctx, uint(in.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	return models.ToBlog(blogItem), nil
 }
+
 func (s *BlogItemService) UpdateBlog(ctx context.Context, in *proto.Blog) (*emptypb.Empty, error) {
-	return nil, nil
+	fmt.Println("UpdateBlog: new request")
+
+	blogItem, err := s.blogItemAction.FetchById(ctx, uint(in.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	blogItem.AuthorId = uint(in.AuthorId)
+	blogItem.Title = in.Title
+	blogItem.Content = in.Content
+
+	if err := s.blogItemAction.Save(ctx, blogItem); err != nil {
+		return nil, err
+	}
+
+	return &emptypb.Empty{}, nil
 }
+
 func (s *BlogItemService) DeleteBlog(ctx context.Context, in *proto.BlogId) (*emptypb.Empty, error) {
-	return nil, nil
+	fmt.Println("DeleteBlog: new request")
+
+	blogItem, err := s.blogItemAction.FetchById(ctx, uint(in.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.blogItemAction.SoftDelete(ctx, blogItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return &emptypb.Empty{}, nil
 }
+
 func (s *BlogItemService) GetAllBlog(_ *emptypb.Empty, stream grpc.ServerStreamingServer[proto.Blog]) error {
+	fmt.Println("GetAllBlog: new request")
+
+	blogItems, err := s.blogItemAction.FetchList(context.Background())
+	if err != nil {
+		return err
+	}
+
+	for _, bi := range blogItems {
+		stream.Send(models.ToBlog(bi))
+	}
+
 	return nil
 }

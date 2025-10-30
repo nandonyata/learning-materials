@@ -9,6 +9,7 @@ import (
 
 type BlogItemActionInterface interface {
 	Save(ctx context.Context, blogItem *models.BlogItem) error
+	SoftDelete(ctx context.Context, blogItem *models.BlogItem) error
 	FetchById(ctx context.Context, id uint) (*models.BlogItem, error)
 	FetchList(ctx context.Context) ([]*models.BlogItem, error)
 }
@@ -25,6 +26,10 @@ func NewBlogItemAction(db *gorm.DB) BlogItemActionInterface {
 
 func (r *BlogItemAction) Save(ctx context.Context, blogItem *models.BlogItem) error {
 	return r.db.WithContext(ctx).Save(blogItem).Error
+}
+
+func (r *BlogItemAction) SoftDelete(ctx context.Context, blogItem *models.BlogItem) error {
+	return r.db.WithContext(ctx).Delete(blogItem).Error
 }
 
 func (r *BlogItemAction) FetchById(ctx context.Context, id uint) (*models.BlogItem, error) {
