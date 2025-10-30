@@ -46,6 +46,7 @@ func (s *BlogItemClientService) DeleteBlog(id int32) {
 	_, err := s.client.DeleteBlog(context.Background(), &proto.BlogId{Id: id})
 	if err != nil {
 		log.Printf("Error: %v\n", err)
+		return
 	}
 
 	log.Println("Success delete blog")
