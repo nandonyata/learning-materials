@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 	"fmt"
-	"learn-grpc/proto"
+	"learn-grpc/pb"
 	"learn-grpc/server/datalayer/actions"
 	"learn-grpc/server/datalayer/models"
 
@@ -12,7 +12,7 @@ import (
 )
 
 type BlogItemService struct {
-	proto.BlogServiceServer
+	pb.BlogServiceServer
 	blogItemAction actions.BlogItemActionInterface
 }
 
@@ -24,7 +24,7 @@ func NewBlogItemService(
 	}
 }
 
-func (s *BlogItemService) CreateBlog(ctx context.Context, in *proto.Blog) (*proto.BlogId, error) {
+func (s *BlogItemService) CreateBlog(ctx context.Context, in *pb.Blog) (*pb.BlogId, error) {
 	fmt.Println("CreateBlog: new request")
 
 	data := models.BlogItem{
@@ -37,10 +37,10 @@ func (s *BlogItemService) CreateBlog(ctx context.Context, in *proto.Blog) (*prot
 		return nil, err
 	}
 
-	return &proto.BlogId{Id: int32(data.ID)}, nil
+	return &pb.BlogId{Id: int32(data.ID)}, nil
 }
 
-func (s *BlogItemService) GetOneBlog(ctx context.Context, in *proto.BlogId) (*proto.Blog, error) {
+func (s *BlogItemService) GetOneBlog(ctx context.Context, in *pb.BlogId) (*pb.Blog, error) {
 	fmt.Println("GetOneBlog: new request")
 
 	blogItem, err := s.blogItemAction.FetchById(ctx, uint(in.Id))
@@ -51,7 +51,7 @@ func (s *BlogItemService) GetOneBlog(ctx context.Context, in *proto.BlogId) (*pr
 	return models.ToBlog(blogItem), nil
 }
 
-func (s *BlogItemService) UpdateBlog(ctx context.Context, in *proto.Blog) (*emptypb.Empty, error) {
+func (s *BlogItemService) UpdateBlog(ctx context.Context, in *pb.Blog) (*emptypb.Empty, error) {
 	fmt.Println("UpdateBlog: new request")
 
 	blogItem, err := s.blogItemAction.FetchById(ctx, uint(in.Id))
@@ -70,7 +70,7 @@ func (s *BlogItemService) UpdateBlog(ctx context.Context, in *proto.Blog) (*empt
 	return &emptypb.Empty{}, nil
 }
 
-func (s *BlogItemService) DeleteBlog(ctx context.Context, in *proto.BlogId) (*emptypb.Empty, error) {
+func (s *BlogItemService) DeleteBlog(ctx context.Context, in *pb.BlogId) (*emptypb.Empty, error) {
 	fmt.Println("DeleteBlog: new request")
 
 	blogItem, err := s.blogItemAction.FetchById(ctx, uint(in.Id))
@@ -86,7 +86,7 @@ func (s *BlogItemService) DeleteBlog(ctx context.Context, in *proto.BlogId) (*em
 	return &emptypb.Empty{}, nil
 }
 
-func (s *BlogItemService) GetAllBlog(_ *emptypb.Empty, stream grpc.ServerStreamingServer[proto.Blog]) error {
+func (s *BlogItemService) GetAllBlog(_ *emptypb.Empty, stream grpc.ServerStreamingServer[pb.Blog]) error {
 	fmt.Println("GetAllBlog: new request")
 
 	blogItems, err := s.blogItemAction.FetchList(context.Background())

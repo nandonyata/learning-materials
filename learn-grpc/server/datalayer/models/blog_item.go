@@ -1,7 +1,7 @@
 package models
 
 import (
-	"learn-grpc/proto"
+	"learn-grpc/pb"
 
 	"gorm.io/gorm"
 )
@@ -13,8 +13,8 @@ type BlogItem struct {
 	Content  string
 }
 
-func ToBlog(b *BlogItem) *proto.Blog {
-	return &proto.Blog{
+func ToBlog(b *BlogItem) *pb.Blog {
+	return &pb.Blog{
 		Id:       int32(b.ID),
 		AuthorId: int32(b.AuthorId),
 		Title:    b.Title,

@@ -2,7 +2,7 @@ package main
 
 import (
 	"learn-grpc/client/services"
-	"learn-grpc/proto"
+	"learn-grpc/pb"
 	"log"
 
 	"google.golang.org/grpc"
@@ -18,14 +18,14 @@ func main() {
 	}
 
 	defer c.Close()
-	client := proto.NewBlogServiceClient(c)
+	client := pb.NewBlogServiceClient(c)
 
 	blogItemClient := services.NewBlogItemClientService(client)
 
 	blogItemClient.CreateBlog()
 	// blogItemClient.GetOneBlog(1)
 	// blogItemClient.GetAllBlog()
-	// blogItemClient.UpdateBlog(&proto.Blog{
+	// blogItemClient.UpdateBlog(&pb.Blog{
 	// 	Id:       1,
 	// 	AuthorId: 10,
 	// 	Title:    "Updated Title",

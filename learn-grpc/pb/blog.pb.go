@@ -4,7 +4,7 @@
 // 	protoc        v6.33.0
 // source: proto/blog.proto
 
-package proto
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -160,7 +160,7 @@ const file_proto_blog_proto_rawDesc = "" +
 	"DeleteBlog\x12\f.blog.BlogId\x1a\x16.google.protobuf.Empty\x122\n" +
 	"\n" +
 	"GetAllBlog\x12\x16.google.protobuf.Empty\x1a\n" +
-	".blog.Blog0\x01B\x12Z\x10learn-grpc/protob\x06proto3"
+	".blog.Blog0\x01B\x06Z\x04./pbb\x06proto3"
 
 var (
 	file_proto_blog_proto_rawDescOnce sync.Once

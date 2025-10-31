@@ -1,7 +1,7 @@
 package main
 
 import (
-	"learn-grpc/proto"
+	"learn-grpc/pb"
 	database "learn-grpc/server/datalayer"
 	"learn-grpc/server/datalayer/actions"
 	"learn-grpc/server/services"
@@ -12,7 +12,7 @@ import (
 )
 
 type Server struct {
-	proto.BlogServiceServer
+	pb.BlogServiceServer
 }
 
 var (
@@ -39,7 +39,7 @@ func main() {
 	log.Printf("Listening on address: %v\n", address)
 
 	server := grpc.NewServer()
-	proto.RegisterBlogServiceServer(server, blogItemService)
+	pb.RegisterBlogServiceServer(server, blogItemService)
 
 	if err = server.Serve(listener); err != nil {
 		log.Fatalf("Failed serving: %v\n", err)

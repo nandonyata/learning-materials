@@ -4,7 +4,7 @@ package blog;
 
 import "google/protobuf/empty.proto";
 
-option go_package = "learn-grpc/proto";
+option go_package = "./pb";
 
 service BlogService {
     rpc CreateBlog (Blog) returns (BlogId);

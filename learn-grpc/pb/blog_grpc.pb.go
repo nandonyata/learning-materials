@@ -4,7 +4,7 @@
 // - protoc             v6.33.0
 // source: proto/blog.proto
 
-package proto
+package pb
 
 import (
 	context "context"
