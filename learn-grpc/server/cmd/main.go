@@ -30,6 +30,7 @@ func main() {
 	// Services
 	blogItemService := services.NewBlogItemService(blogItemAction)
 	userService := services.NewUserService(userAction)
+	greetService := services.NewGreetService()
 
 	// Create auth interceptor
 	authInterceptor := middleware.NewAuthInterceptor(secretKey)
@@ -50,6 +51,7 @@ func main() {
 	// Register services
 	pb.RegisterBlogServiceServer(server, blogItemService)
 	pb.RegisterUserServiceServer(server, userService)
+	pb.RegisterGreetServiceServer(server, greetService)
 
 	if err = server.Serve(listener); err != nil {
 		log.Fatalf("Failed serving: %v\n", err)
