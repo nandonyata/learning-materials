@@ -19,18 +19,18 @@ func NewGreetService() *GreetService {
 	return &GreetService{}
 }
 
-func (s *UserService) Greet(ctx context.Context, in *pb.GreetRequest) (*pb.GreetResponse, error) {
+func (s *GreetService) Greet(ctx context.Context, in *pb.GreetRequest) (*pb.GreetResponse, error) {
 	return &pb.GreetResponse{Result: fmt.Sprintf("Hi %v", in.FirstName)}, nil
 }
 
-func (s *UserService) GreetManyTimes(in *pb.GreetRequest, stream grpc.ServerStreamingServer[pb.GreetResponse]) error {
+func (s *GreetService) GreetManyTimes(in *pb.GreetRequest, stream grpc.ServerStreamingServer[pb.GreetResponse]) error {
 	for i := range 10 {
 		stream.Send(&pb.GreetResponse{Result: fmt.Sprintf("Hi %v %d", in.FirstName, i)})
 	}
 	return nil
 }
 
-func (s *UserService) LongGreet(stream grpc.ClientStreamingServer[pb.GreetRequest, pb.GreetResponse]) error {
+func (s *GreetService) LongGreet(stream grpc.ClientStreamingServer[pb.GreetRequest, pb.GreetResponse]) error {
 	result := "Hi ..."
 
 	for {
@@ -49,7 +49,7 @@ func (s *UserService) LongGreet(stream grpc.ClientStreamingServer[pb.GreetReques
 	}
 }
 
-func (s *UserService) GreetEveryOne(stream grpc.BidiStreamingServer[pb.GreetRequest, pb.GreetResponse]) error {
+func (s *GreetService) GreetEveryOne(stream grpc.BidiStreamingServer[pb.GreetRequest, pb.GreetResponse]) error {
 	for {
 		req, err := stream.Recv()
 		if err == io.EOF {

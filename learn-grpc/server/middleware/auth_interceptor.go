@@ -50,7 +50,8 @@ func (a *AuthInterceptor) UnaryInterceptor(
 	// STEP 1: Check if this endpoint needs authentication
 	// Skip auth for public endpoints (Login and Register)
 	if strings.Contains(info.FullMethod, "/Login") ||
-		strings.Contains(info.FullMethod, "/Register") {
+		strings.Contains(info.FullMethod, "/Register") ||
+		strings.Contains(info.FullMethod, "GreetService") {
 		// Public endpoint - just call the handler directly
 		return handler(ctx, req) // skip auth
 	}
@@ -80,6 +81,13 @@ func (a *AuthInterceptor) StreamInterceptor(
 	info *grpc.StreamServerInfo, // Info about the stream method
 	handler grpc.StreamHandler, // The actual stream handler
 ) error {
+
+	// SAME CHECK: Skip auth for public endpoints
+	// This handles streaming methods like GreetManyTimes, GreetEveryOne, etc.
+	if strings.Contains(info.FullMethod, "GreetService") {
+		// Public streaming endpoint - call handler directly
+		return handler(srv, ss)
+	}
 
 	// STEP 1: Validate token from the stream's context
 	userID, err := a.authorize(ss.Context())
