@@ -6,6 +6,7 @@ import (
 	"learn-grpc/pb"
 	"learn-grpc/server/datalayer/actions"
 	"learn-grpc/server/datalayer/models"
+	"learn-grpc/server/middleware"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -30,7 +31,7 @@ func (s *BlogItemService) CreateBlog(ctx context.Context, in *pb.Blog) (*pb.Blog
 	fmt.Println("CreateBlog: new request")
 
 	// Get authenticated user ID from context
-	userID, ok := ctx.Value("userID").(int32)
+	userID, ok := ctx.Value(middleware.UserIDKey).(int32)
 	if !ok {
 		return nil, status.Errorf(codes.Unauthenticated, "user not authenticated")
 	}
@@ -64,7 +65,7 @@ func (s *BlogItemService) UpdateBlog(ctx context.Context, in *pb.Blog) (*emptypb
 	fmt.Println("UpdateBlog: new request")
 
 	// Get authenticated user ID
-	userID, ok := ctx.Value("userID").(int32)
+	userID, ok := ctx.Value(middleware.UserIDKey).(int32)
 	if !ok {
 		return nil, status.Errorf(codes.Unauthenticated, "user not authenticated")
 	}
@@ -93,7 +94,7 @@ func (s *BlogItemService) DeleteBlog(ctx context.Context, in *pb.BlogId) (*empty
 	fmt.Println("DeleteBlog: new request")
 
 	// Get authenticated user ID
-	userID, ok := ctx.Value("userID").(int32)
+	userID, ok := ctx.Value(middleware.UserIDKey).(int32)
 	if !ok {
 		return nil, status.Errorf(codes.Unauthenticated, "user not authenticated")
 	}
