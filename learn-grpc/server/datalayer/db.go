@@ -49,6 +49,7 @@ func Migrate() {
 
 	// Example: add your model structs here
 	err := DB.AutoMigrate(
+		&models.User{},
 		&models.BlogItem{},
 	)
 	if err != nil {
