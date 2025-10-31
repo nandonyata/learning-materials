@@ -6,6 +6,7 @@ import (
 	"learn-grpc/pb"
 	"learn-grpc/server/datalayer/actions"
 	"learn-grpc/server/datalayer/models"
+	"learn-grpc/server/middleware"
 
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
@@ -165,7 +166,7 @@ func (s *UserService) GetProfile(ctx context.Context, _ *emptypb.Empty) (*pb.Use
 
 	// STEP 1: Get userID from context
 	// The auth interceptor already validated the token and added userID
-	userID, ok := ctx.Value("userID").(int32)
+	userID, ok := ctx.Value(middleware.UserIDKey).(int32)
 	if !ok {
 		// This should never happen if interceptor is working correctly
 		// But we check anyway for safety

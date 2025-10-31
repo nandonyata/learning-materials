@@ -13,7 +13,7 @@ import (
 
 type contextKey string
 
-const userIDKey contextKey = "userID"
+const UserIDKey contextKey = "userID"
 
 // AuthInterceptor is the main struct that holds our authentication logic
 // Think of it as a security configuration object
@@ -49,10 +49,10 @@ func (a *AuthInterceptor) UnaryInterceptor(
 
 	// STEP 1: Check if this endpoint needs authentication
 	// Skip auth for public endpoints (Login and Register)
-	if strings.Contains(info.FullMethod, "Login") ||
-		strings.Contains(info.FullMethod, "Register") {
+	if strings.Contains(info.FullMethod, "/Login") ||
+		strings.Contains(info.FullMethod, "/Register") {
 		// Public endpoint - just call the handler directly
-		return handler(ctx, req)
+		return handler(ctx, req) // skip auth
 	}
 
 	// STEP 2: This is a protected endpoint, validate the token
@@ -64,7 +64,7 @@ func (a *AuthInterceptor) UnaryInterceptor(
 
 	// STEP 3: Token is valid! Add userID to context so handlers can use it
 	// This is like attaching a "verified badge" with the user's ID
-	ctx = context.WithValue(ctx, userIDKey, userID)
+	ctx = context.WithValue(ctx, UserIDKey, userID)
 
 	// STEP 4: Now call the actual handler with the enriched context
 	return handler(ctx, req)
@@ -92,7 +92,7 @@ func (a *AuthInterceptor) StreamInterceptor(
 	// We need to wrap because we can't modify the original stream's context
 	wrappedStream := &wrappedServerStream{
 		ServerStream: ss,
-		ctx:          context.WithValue(ss.Context(), userIDKey, userID),
+		ctx:          context.WithValue(ss.Context(), UserIDKey, userID),
 	}
 
 	// STEP 3: Call the actual stream handler with our wrapped stream
