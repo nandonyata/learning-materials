@@ -1,0 +1,2 @@
+-- Initial migration managed by GORM
+-- GORM AutoMigrate will handle schema changes
