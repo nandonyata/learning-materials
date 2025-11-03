@@ -17,8 +17,8 @@ import (
 // UserService implements the pb.UserServiceServer interface
 // This is the BUSINESS LOGIC layer - it orchestrates the operations
 type UserService struct {
-	pb.UserServiceServer                             // Embed to satisfy interface
-	userAction           actions.UserActionInterface // Database operations
+	pb.UnimplementedUserServiceServer                             // Embed to satisfy interface
+	userAction                        actions.UserActionInterface // Database operations
 }
 
 // NewUserService creates a new UserService instance

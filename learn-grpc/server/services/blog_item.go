@@ -15,7 +15,7 @@ import (
 )
 
 type BlogItemService struct {
-	pb.BlogServiceServer
+	pb.UnimplementedBlogServiceServer
 	blogItemAction actions.BlogItemActionInterface
 }
 

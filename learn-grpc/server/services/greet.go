@@ -12,7 +12,7 @@ import (
 )
 
 type GreetService struct {
-	pb.GreetServiceServer
+	pb.UnimplementedGreetServiceServer
 }
 
 func NewGreetService() *GreetService {
