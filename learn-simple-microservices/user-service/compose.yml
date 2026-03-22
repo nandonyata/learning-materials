@@ -17,5 +17,3 @@ networks:
   user-service-networks:
   product-service_product-service-networks: # This is the external network that is created by product-service, the name is product-service_product-service-networks because the name of the service is product-service and the name of the network is product-service-networks, and the underscore is added by docker compose (docker compose auto-prefix names)
     external: true
-  aaaa:
-    external: true
