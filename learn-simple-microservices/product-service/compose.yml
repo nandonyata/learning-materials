@@ -4,7 +4,7 @@ services:
     build:
       context: ./  
     # ports:
-    #   - "4001:4001"                   # We don't need to expose this service as this service is only going to be used by other services (user-service) only by using the network, not directly through the public IP
+    #   - "4001:4001"                   # We don't need to expose this service as this service is only going to be used by other services (user-service) (container -> container) only by using the network, not directly through the public IP (container -> outside container (host IP) -> container)
     volumes:
       - ./:/app
     networks:
