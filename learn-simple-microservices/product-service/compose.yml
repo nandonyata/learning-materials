@@ -1,0 +1,14 @@
+services:
+  product-service:
+    image: product-service:latest
+    build:
+      context: ./  
+    ports:
+      - "4001:4001"                   # We don't need to expose this service as this service is only going to be used by other services (user-service) only by using the network, not directly through the public IP
+    volumes:
+      - ./:/app
+    networks:
+      - product-service-networks
+
+networks:
+  product-service-networks: # This network is going to be used by user-service to connect to this service
