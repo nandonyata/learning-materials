@@ -46,6 +46,27 @@ func Shorten(ctx context.Context, p *ShortenParams) (*URL, error) {
 	return &URL{ID: id, OriginalURL: p.URL}, nil
 }
 
+// ShortenA shortens a URL.
+//
+//encore:api public method=POST path=/url/A
+func ShortenA(ctx context.Context, p *ShortenParams) (*URL, error) {
+	id, err := generateID()
+	if err != nil {
+		return nil, err
+	}
+
+	url := &URL{
+		ID:          id,
+		OriginalURL: p.URL,
+	}
+
+	if err := gormDB.WithContext(ctx).Create(url).Error; err != nil {
+		return nil, err
+	}
+
+	return &URL{ID: id, OriginalURL: p.URL}, nil
+}
+
 // generateID generates a random short ID.
 func generateID() (string, error) {
 	var data [6]byte // 6 bytes of entropy
