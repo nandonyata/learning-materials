@@ -44,25 +44,27 @@ func Test_printMessage(t *testing.T) {
 			name: "Testing printing message",
 		},
 	}
+
+	stdOut := os.Stdout
+
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+	main() // call the main to populate the "msg"
+	w.Close()
+	read, _ := io.ReadAll(r)
+	output := string(read)
+	os.Stdout = stdOut
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			stdOut := os.Stdout
-
-			r, w, _ := os.Pipe()
-			os.Stdout = w
-
-			printMessage()
-
-			w.Close()
-
-			read, _ := io.ReadAll(r)
-			output := string(read)
-
-			os.Stdout = stdOut
-
-			if !strings.Contains(output, "pewpew") { // we got the value "pewpew" from "Test_updateMessage"
-				t.Errorf("Expected pewpew, but got %s", output)
-
+			if !strings.Contains(output, "Hello, universe!") {
+				t.Errorf("Expected Hello, universe!, but got %s", output)
+			}
+			if !strings.Contains(output, "Hello, cosmos!") {
+				t.Errorf("Expected Hello, cosmos!, but got %s", output)
+			}
+			if !strings.Contains(output, "Hello, world!") {
+				t.Errorf("Expected Hello, world!, but got %s", output)
 			}
 		})
 	}
