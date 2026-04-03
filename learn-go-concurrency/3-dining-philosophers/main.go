@@ -35,10 +35,12 @@ var philosophers = []Philosopher{
 }
 
 // Define a few variables.
-var hunger = 3                  // how many times a philosopher eats
-var eatTime = 1 * time.Second   // how long it takes to eatTime
-var thinkTime = 3 * time.Second // how long a philosopher thinks
-var sleepTime = 1 * time.Second // how long to wait when printing things out
+var hunger = 3                       // how many times a philosopher eats
+var eatTime = 1 * time.Second        // how long it takes to eatTime
+var thinkTime = 3 * time.Second      // how long a philosopher thinks
+var sleepTime = 1 * time.Second      // how long to wait when printing things out
+var orderResult = []string{}         // slice to store the order of philosophers eating
+var orderResultMutex = &sync.Mutex{} // mutex to protect the orderResult slice
 
 func main() {
 	// print out a welcome message
@@ -51,7 +53,9 @@ func main() {
 
 	// print out finished message
 	fmt.Println("The table is empty.")
-
+	fmt.Println("---------------------------")
+	fmt.Println("Order of philosophers eating:")
+	fmt.Println(orderResult)
 }
 
 func dine() {
@@ -139,4 +143,9 @@ func diningProblem(philosopher Philosopher, wg *sync.WaitGroup, forks map[int]*s
 	// The philosopher has finished eating, so print out a message.
 	fmt.Println(philosopher.name, "is satisified.")
 	fmt.Println(philosopher.name, "left the table.")
+
+	// Add the philosopher to the orderResult slice.
+	orderResultMutex.Lock()
+	orderResult = append(orderResult, philosopher.name)
+	orderResultMutex.Unlock()
 }
