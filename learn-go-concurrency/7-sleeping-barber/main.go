@@ -34,41 +34,39 @@ import (
 var seatingCapacity = 10
 var arrivalRate = 100
 var cutDuration = 1000 * time.Millisecond
-var timeOpen = 10 * time.Second
+var timeOpen = 5 * time.Second
 
 func main() {
-	// seed our random number generator
-	rand.Seed(time.Now().UnixNano())
-
 	// print welcome message
 	color.Yellow("The Sleeping Barber Problem")
 	color.Yellow("---------------------------")
 
 	// create channels if we need any
+	barberDoneChan := make(chan bool)
 	clientChan := make(chan string, seatingCapacity)
-	doneChan := make(chan bool)
 
 	// create the barbershop
 	shop := BarberShop{
 		ShopCapacity:    seatingCapacity,
 		HairCutDuration: cutDuration,
 		NumberOfBarbers: 0,
+		BarbersDoneChan: barberDoneChan,
 		ClientsChan:     clientChan,
-		BarbersDoneChan: doneChan,
 		Open:            true,
 	}
 
 	color.Green("The shop is open for the day!")
 
 	// add barbers
-	shop.addBarber("Frank")
+	shop.addBarber("Pewpew")
+	shop.addBarber("Pawpaw")
 
 	// start the barbershop as a goroutine
 	shopClosing := make(chan bool)
 	closed := make(chan bool)
 
 	go func() {
-		<-time.After(timeOpen)
+		<-time.NewTimer(timeOpen).C
 		shopClosing <- true
 		shop.closeShopForDay()
 		closed <- true
@@ -79,12 +77,11 @@ func main() {
 
 	go func() {
 		for {
-			// get a random number with average arrival rate
-			randomMillseconds := rand.Int() % (2 * arrivalRate)
+			randomMiliSeconds := rand.Intn(200) % (arrivalRate * 2)
 			select {
 			case <-shopClosing:
 				return
-			case <-time.After(time.Millisecond * time.Duration(randomMillseconds)):
+			case <-time.NewTimer(time.Millisecond * time.Duration(randomMiliSeconds)).C:
 				shop.addClient(fmt.Sprintf("Client #%d", i))
 				i++
 			}
