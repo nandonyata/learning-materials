@@ -43,4 +43,19 @@ void main() {
   // const now = DateTime.now();   // ERROR — not known at compile time
   const list2 = [1, 2, 3];
   // list2.add(4);                  // ERROR — const collections are frozen, can't mutate contents either
+
+  // NOTES:
+  /*
+Compile time — the phase before your program runs, when the Dart compiler reads your source code, checks it for errors, and translates it into something executable (machine code, or bytecode for the VM).
+- Happens when you save/build the code, not when it executes
+- The compiler can only work with things it can figure out without running anything — literal values, fixed expressions, type declarations
+- Errors caught here: type mismatches, missing semicolons, undefined variables, syntax errors
+
+Runtime — the phase while your program is actually executing, line by line, doing real work.
+- This is when user input arrives, network calls happen, DateTime.now() gets the actual current time, loops run, etc.
+- Errors caught here: dividing by zero, null reference exceptions, array index out of bounds, network failures — things that depend on data or conditions the compiler can't know in advance
+
+Simple analogy: think of compile time as writing and proofreading a recipe, and runtime as actually cooking it. You can catch "you forgot to list an ingredient" while proofreading — but you can't know "the oven is broken" until you actually try to cook.
+
+*/
 }
