@@ -1,5 +1,11 @@
 void main() {
-  // 1. Declare a variable
+  // 1. Null
+  var myName;
+  var myAge = null;
+  print('myName: $myName');
+  print('myAge: $myAge');
+
+  // 2. Declare a variable
 
   // String
   var name = 'John Doe';
