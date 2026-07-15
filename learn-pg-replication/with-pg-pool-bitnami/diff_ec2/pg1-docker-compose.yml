@@ -2,7 +2,7 @@ version: '2'  # Keep this at the top.
 
 services:
   pg-1:
-    image: bitnami/postgresql-repmgr:14
+    image: soldevelo/postgresql-repmgr:14
     ports:
       - 5002:5432
     volumes:

@@ -2,7 +2,7 @@ version: '2'
 
 services:
   pg-0:
-    image: bitnami/postgresql-repmgr:14
+    image: soldevelo/postgresql-repmgr:14
     ports:
       - 5001:5432
     volumes:
