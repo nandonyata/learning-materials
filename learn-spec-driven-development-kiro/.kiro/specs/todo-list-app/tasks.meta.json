@@ -1,0 +1,317 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Create `index.html` with semantic HTML boilerplate": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213639
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309217959
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309255278
+      }
+    ],
+    "1.2 Create `style.css` and `app.js` with empty boilerplate": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213721
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309218325
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309255806
+      }
+    ],
+    "2.1 Implement `getTodos`, `addTodo`, `updateTodo`, and `deleteTodo` in `app.js`": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213758
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309260792
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309569040
+      }
+    ],
+    "3.1 Implement `validateTitle(title)` in `app.js`": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213790
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309576154
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309604946
+      }
+    ],
+    "4.1 Implement `renderTodoList()` and `renderTodoItem(todo)` in `app.js`": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213814
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309635240
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309681117
+      }
+    ],
+    "4.2 Implement `showError(inputEl, message)` and `clearError(inputEl)` in `app.js`": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213878
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309686463
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309839307
+      }
+    ],
+    "5.1 Add create form to `index.html` and wire `handleCreateSubmit` in `app.js`": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213903
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309845468
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794310014054
+      }
+    ],
+    "6.1 Add toggle and delete controls to `renderTodoItem` and implement `handleToggle` / `handleDelete`": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213929
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794310019558
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794310074958
+      }
+    ],
+    "7.1 Add inline edit controls to `renderTodoItem` and implement `handleEditSave` / `handleEditCancel`": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213957
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794310080439
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794310134463
+      }
+    ],
+    "8. Checkpoint — Core functionality complete": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309213981
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794310173029
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794378084255
+      }
+    ],
+    "9.1 Add layout and component styles": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309214006
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794378087775
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794378138568
+      }
+    ],
+    "9.2 Add completion and error styles": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309214036
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794378143003
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794378162499
+      }
+    ],
+    "10. Final checkpoint — Ensure all tests pass": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309214058
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794378180794
+      },
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794379078537
+      }
+    ],
+    "1. Set up project files": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309255841
+      }
+    ],
+    "2. Implement TodoStore": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309569115
+      }
+    ],
+    "3. Implement Validator": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309604986
+      }
+    ],
+    "2.2 Write property test for TodoStore — Property 1 (Create round-trip)": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309628721
+      }
+    ],
+    "2.3 Write property test for TodoStore — Property 2 (Unique IDs)": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309629169
+      }
+    ],
+    "2.4 Write property test for TodoStore — Property 3 (Delete removes todo)": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309629600
+      }
+    ],
+    "2.5 Write property test for TodoStore — Property 4 (Toggle preserves fields)": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309630094
+      }
+    ],
+    "3.2 Write property test for Validator — Property 5 (Validation rejects bad titles)": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309630509
+      }
+    ],
+    "4. Implement Renderer": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794309839377
+      }
+    ],
+    "5. Implement Create Todo": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794310014102
+      }
+    ],
+    "6. Implement Toggle and Delete": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794310075013
+      }
+    ],
+    "7. Implement Inline Edit": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794310134503
+      }
+    ],
+    "9. Style the app (`style.css`)": [
+      {
+        "executionId": "7e4c2562-a83b-41fb-9453-107d7d4656c6",
+        "chatSessionId": "sess_cd5752d5-885a-477e-a01b-0a090502d354",
+        "timestamp": 1794378162540
+      }
+    ]
+  }
+}
