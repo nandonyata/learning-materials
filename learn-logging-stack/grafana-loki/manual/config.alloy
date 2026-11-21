@@ -1,0 +1,24 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+local.file_match "zerolog" {
+  path_targets = [{
+    __path__ = "/var/log/zerolog/app.log",
+    job      = "zerolog",
+    service  = "go-app",
+  }]
+}
+
+loki.source.file "zerolog" {
+  targets    = local.file_match.zerolog.targets
+  forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" {
+  endpoint {
+    // Alloy runs in Docker; this name reaches the Loki port published on the host.
+    url = "http://host.docker.internal:3100/loki/api/v1/push"
+  }
+}
