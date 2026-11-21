@@ -6,3 +6,7 @@ This folder has two equivalent examples. Pick one at a time:
 - [`compose/`](compose/NOTES.md): start the same three services with one `docker compose up -d` command.
 
 Both examples expect the Go application in `../zerolog` to write `app.log`.
+
+---
+
+Grafana Alloy (collector) + Loki (storage) + Grafana (UI)
