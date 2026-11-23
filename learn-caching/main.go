@@ -2,63 +2,22 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"time"
+	"log"
 
 	"github.com/redis/go-redis/v9"
 )
 
-type User struct {
-	FullName string `json:"full_name"`
-	Email    string `json:"email,omitempty"`
-	Password string `json:"-"`
-	age      int    // unexported fields are ignored
-}
-
+// The root program is only a connection check. The real examples are under cmd/.
 func main() {
-    ctx := context.Background()
-    client := redis.NewClient(&redis.Options{
-        Addr: "localhost:6379",
-    })
+	ctx := context.Background()
+	client := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
+	defer client.Close()
 
-    if err := client.Set(ctx, "bike:1", "Process 134", 0).Err(); err != nil {
-        panic(err)
-    }
-
-    val, err := client.Get(ctx, "bike:1").Result()
-    if err != nil {
-        panic(err)
-    }
-
-    fmt.Println(val)
-
-// ----
-
-
-	user := User{
-		FullName: "Jane Doe",
-		Email:    "",
-		Password: "secret",
-		age:      30,
+	if err := client.Ping(ctx).Err(); err != nil {
+		log.Fatal("cannot connect to Redis: ", err)
 	}
 
-	// Convert struct to JSON bytes
-	jsonData, err := json.Marshal(user)
-	if err != nil {
-		fmt.Println("Error marshaling:", err)
-		return
-	}
-
-
-	 if err := client.Set(ctx, "user:1", jsonData, 10*time.Minute).Err(); err != nil {
-        panic(err)
-    }
-
-    valuser, err := client.Get(ctx, "user:1").Result()
-    if err != nil {
-        panic(err)
-    }
-
-    fmt.Println(valuser)
+	fmt.Println("Redis is ready.")
+	fmt.Println("Run an example, e.g. go run ./cmd/01-cache-aside")
 }
