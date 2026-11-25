@@ -16,6 +16,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+
+	"github.com/joho/godotenv"
 )
 
 const tableName = "my-go-file-storage"
@@ -35,6 +37,8 @@ type Server struct {
 }
 
 func main() {
+	_ = godotenv.Load() // ignore the error if there is no .env file
+	
 	bucket := os.Getenv("BUCKET_NAME")
 	if bucket == "" {
 		log.Fatal("please set the BUCKET_NAME environment variable")
