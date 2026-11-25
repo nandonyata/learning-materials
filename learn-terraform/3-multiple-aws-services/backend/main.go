@@ -20,7 +20,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const tableName = "my-go-file-storage"
+var tableName string
 
 // FileRecord is one item in the DynamoDB table. "ID" is the hash_key.
 type FileRecord struct {
@@ -38,10 +38,15 @@ type Server struct {
 
 func main() {
 	_ = godotenv.Load() // ignore the error if there is no .env file
-	
+
 	bucket := os.Getenv("BUCKET_NAME")
 	if bucket == "" {
 		log.Fatal("please set the BUCKET_NAME environment variable")
+	}
+
+	tableName = os.Getenv("TABLE_NAME")
+	if tableName == "" {
+		log.Fatal("please set the TABLE_NAME environment variable")
 	}
 
 	// Loads credentials and region from `aws configure` / environment variables
@@ -51,7 +56,9 @@ func main() {
 	}
 
 	srv := &Server{
-		s3:     s3.NewFromConfig(cfg),
+		s3: s3.NewFromConfig(cfg, func(o *s3.Options) {
+			o.UsePathStyle = os.Getenv("AWS_ENDPOINT_URL") != ""
+		}),
 		db:     dynamodb.NewFromConfig(cfg),
 		bucket: bucket,
 	}

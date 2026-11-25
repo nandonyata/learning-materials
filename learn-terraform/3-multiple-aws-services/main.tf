@@ -5,6 +5,13 @@ provider "aws" {
 
   skip_credentials_validation = true
   skip_requesting_account_id  = true
+  s3_use_path_style           = true   # LocalStack needs path-style S3 URLs
+
+  # Without an endpoints block, Terraform would send the requests to real AWS (and fail with the fake test credentials).
+  endpoints {
+    s3       = "http://localhost:4566"
+    dynamodb = "http://localhost:4566"
+  }
 }
 
 resource "aws_s3_bucket" "example" {
@@ -25,10 +32,10 @@ output "s3_bucket_name" {
 resource "aws_dynamodb_table" "go-app-file" {
   name         = "go-app-file"
   billing_mode = "PAY_PER_REQUEST"   # no capacity planning needed
-  hash_key     = "uuid"
+  hash_key     = "ID" # Go code in "./backend/main.go" reads and writes the key as ID
 
   attribute {
-    name = "uuid"
+    name = "ID"
     type = "S"                       # S = string
   }
 }
